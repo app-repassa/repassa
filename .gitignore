@@ -1,8 +1,0 @@
-node_modules/
-.env
-.env.local
-*.log
-uploads/
-back/uploads/
-.DS_Store
-.vscode/
