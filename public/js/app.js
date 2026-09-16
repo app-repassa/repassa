@@ -51,10 +51,33 @@ document.querySelectorAll('.tabs button').forEach(b => {
 
 function togglePw(id, el) {
   const input = document.getElementById(id);
+  if (!input) return;
   const isPw = input.type === 'password';
   input.type = isPw ? 'text' : 'password';
-  el.textContent = isPw ? '🙈' : '👁';
 }
+
+// delegated handler for `.pw-toggle` buttons
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest && e.target.closest('.pw-toggle');
+  if (!btn) return;
+  const targetId = btn.dataset.target;
+  if (!targetId) return;
+  const input = document.getElementById(targetId);
+  if (!input) return;
+  const isPw = input.type === 'password';
+  input.type = isPw ? 'text' : 'password';
+});
+
+// initialize pw-toggle buttons to reflect current input type
+function initPwToggles() {
+  document.querySelectorAll('.pw-toggle').forEach(btn => {
+    const target = btn.dataset.target;
+    const input = document.getElementById(target);
+    if (!input) return;
+    const isPw = input.type === 'password';
+  });
+}
+document.addEventListener('DOMContentLoaded', initPwToggles);
 
 function setRole(role) {
   document.getElementById('rt-doador').classList.toggle('active', role === 'doador');
