@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repassa</title>
+<link rel="icon" href="/assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/repassa-main/css/styles.css">
+</head>
+<body>
+
+
+<div class="app">
+
+  <div class="brandbar">
+    <div class="wordmark">
+      <img src="logo.png" alt="Repassa" style="width:30px;height:auto;">
+      Repassa
+    </div>
+    <div class="tag">Protótipo navegável — clique nas abas para ver cada tela</div>
+  </div>
+
+  <div class="tabs">
+    <button class="active" data-screen="login">Entrar</button>
+    <button data-screen="cadastro">Cadastro</button>
+    <button data-screen="busca">Buscar item</button>
+    <button data-screen="produto">Detalhe do produto</button>
+    <button data-screen="perfil">Perfil do doador</button>
+    <button data-screen="carrinho">Carrinho</button>
+    <button data-screen="tracking">Rastreamento</button>
+    <button data-screen="form">Formulário do donatário</button>
+  </div>
+
+  <div class="screen-frame">
+
+    <!-- 1. LOGIN -->
+    <div class="screen active" id="screen-login">
+      <div class="login-visual">
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="login-logo" style="padding:0; overflow:hidden;">
+          <img src="logo.png" alt="Repassa" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+      </div>
+      <div class="login-form-wrap">
+        <div class="login-form">
+          <h2>Entre com seu cadastro</h2>
+          <div class="field">
+            <label class="field-label">Email</label>
+            <input class="pill-input" id="login-email" type="email" placeholder="voce@email.com">
+          </div>
+          <div class="field field-relative">
+            <label class="field-label">Senha</label>
+            <input class="pill-input" id="login-senha" type="password" placeholder="••••••••">
+            <span class="eye" onclick="togglePw('login-senha', this)">👁</span>
+          </div>
+          <div class="row-links"><a href="#" onclick="alert('Nesta versão de demonstração não há recuperação de senha real.'); return false;">Esqueci a senha</a></div>
+          <p id="login-msg" style="min-height:16px; font-size:12.5px; color:#C0392B; margin:0 0 10px;"></p>
+          <button class="btn-primary" onclick="fazerLogin()">Entrar</button>
+          <div class="signup-note">
+            <strong>Não tem uma conta? Faça seu cadastro como:</strong>
+            <div class="role-pick">
+              <button onclick="setRole('doador'); goTo('cadastro')">Doador</button>
+              <button onclick="setRole('donatario'); goTo('cadastro')">Donatário</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CADASTRO -->
+    <div class="screen" id="screen-cadastro">
+      <div class="cadastro-head">
+        <div class="brand-mini">
+          <img src="logo.png" alt="Repassa" style="width:34px;height:auto;">
+          <span>Repassa</span>
+        </div>
+        <div class="role-toggle">
+          <button class="active" id="rt-doador" onclick="setRole('doador')">Doador</button>
+          <button id="rt-donatario" onclick="setRole('donatario')">Donatário</button>
+        </div>
+      </div>
+
+      <div class="cad-grid">
+        <div class="field"><label class="field-label">Nome completo</label><input class="pill-input" id="cad-nome" placeholder="Seu nome"></div>
+        <div class="field"><label class="field-label">Idade</label><input class="pill-input" id="cad-idade" type="number" placeholder="Ex: 34"></div>
+        <div class="field"><label class="field-label">CPF</label><input class="pill-input" id="cad-cpf" placeholder="000.000.000-00"></div>
+        <div class="field"><label class="field-label">Telefone</label><input class="pill-input" id="cad-telefone" placeholder="(00) 00000-0000"></div>
+        <div class="field full"><label class="field-label">Email</label><input class="pill-input" id="cad-email" type="email" placeholder="voce@email.com"></div>
+        <div class="field field-relative"><label class="field-label">Senha</label><input class="pill-input" id="cad-senha" type="password" placeholder="••••••••"><span class="eye" onclick="togglePw('cad-senha', this)">👁</span></div>
+        <div class="field field-relative"><label class="field-label">Confirme sua senha</label><input class="pill-input" id="cad-confirmar" type="password" placeholder="••••••••"><span class="eye" onclick="togglePw('cad-confirmar', this)">👁</span></div>
+      </div>
+      <p id="cad-msg" style="min-height:16px; text-align:center; font-size:12.5px; color:#C0392B; margin:4px 0 0;"></p>
+      <div class="cad-submit"><button class="btn-primary" id="cad-btn" onclick="cadastrar()">Cadastrar como doador</button></div>
+      <p class="helper-note">Ao continuar, você concorda com os termos de uso da Repassa.</p>
+    </div>
+
+    <!-- 3. BUSCA -->
+    <div class="screen" id="screen-busca">
+      <div class="topbar">
+        <div class="brand-mini">
+          <span style="background:#fff; border-radius:8px; padding:3px; display:inline-flex;">
+            <img src="/assets/logo.png" alt="Repassa" style="width:24px;height:auto;display:block;">
+          </span>
+          <span>Repassa</span>
+        </div>
+        <div class="navlinks">
+          <span>Categorias</span><span>Marcas</span><span>Produtos semi-novos</span>
+        </div>
+        <div class="searchbar">
+          <span>🔍</span>
+          <input id="busca-input" placeholder="Pesquisar item…" value="">
+          <button onclick="executarBusca()">Pesquisar</button>
+        </div>
+        <div class="icons" id="busca-session"></div>
+      </div>
+
+      <div class="busca-body">
+        <div class="filters">
+          <h3>Filtros</h3>
+          <div class="field"><label class="field-label">Estado</label><input class="pill-input" id="busca-estado" placeholder="SP"></div>
+          <div class="field"><label class="field-label">Local</label><input class="pill-input" id="busca-local" placeholder="Cidade"></div>
+          <div class="field"><label class="field-label">Frete</label><input class="pill-input" id="busca-frete" placeholder="Retirada / Entrega"></div>
+        </div>
+        <div class="results">
+          <h3 id="busca-titulo-1">Com base na sua pesquisa</h3>
+          <div class="card-grid" id="grid-1"></div>
+          <h3>Produtos similares</h3>
+          <div class="card-grid" id="grid-2"></div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- PRODUTO (detalhe) -->
+    <div class="screen" id="screen-produto">
+      <div class="topbar">
+        <div class="brand-mini">
+          <span style="background:#fff; border-radius:8px; padding:3px; display:inline-flex;">
+            <img src="/assets/logo.png" alt="Repassa" style="width:24px;height:auto;display:block;">
+          </span>
+          <span>Repassa</span>
+        </div>
+        <div class="navlinks">
+          <span>Categorias</span><span>Marcas</span><span>Produtos semi-novos</span>
+        </div>
+        <div class="searchbar">
+          <span>🔍</span>
+          <input placeholder="Pesquisar item…" value="Iphone">
+          <button>Pesquisar</button>
+        </div>
+        <div class="icons">🛒 ☰</div>
+      </div>
+
+      <div class="produto-body" id="produto-body">
+        <div class="back-row" onclick="goTo('busca')">← Voltar</div>
+        <div class="produto-main">
+          <div class="produto-photo">
+            <div class="phone-mock"><div class="screen-mock">📱</div></div>
+          </div>
+          <div class="produto-panel">
+            <h2 id="produto-nome">iPhone 7, 256GB, Preto Brilhante</h2>
+            <p style="font-size:12.5px; color:var(--forest); font-weight:600; cursor:pointer; margin:-6px 0 14px;" onclick="goTo('perfil')">👤 Doado por Marina Costa · ★ 4.9 — ver perfil</p>
+            <h4>Informações técnicas</h4>
+            <p style="font-size:13.5px; color:var(--ink); margin:0 0 4px; font-weight:600;">Características:</p>
+            <ul>
+              <li>Marca: Apple</li>
+              <li>Modelo: iPhone 7</li>
+            </ul>
+            <p style="font-size:13.5px; color:var(--ink); margin:14px 0 4px; font-weight:600;">Especificações:</p>
+            <ul>
+              <li>Condição: Bom</li>
+              <li>Cor: Preto Brilhante</li>
+              <li>Memória interna: 256GB</li>
+              <li>Memória RAM: 2GB</li>
+              <li>Câmera principal: 12MP</li>
+              <li>Câmera frontal: 7MP</li>
+              <li>Chip: um chip</li>
+              <li>Processador: Quad-core 2.34GHz e 2GHz</li>
+              <li>Resolução da tela: 1334 x 750 pixels</li>
+              <li>Tamanho da tela: 4.7"</li>
+              <li>Dual SIM: Não</li>
+              <li>Operadora: Desbloqueado</li>
+            </ul>
+            <button class="btn-primary" onclick="goTo('form')">Preencher formulário</button>
+          </div>
+        </div>
+
+        <p class="similar-heading">Produtos similares</p>
+        <div class="card-grid" id="grid-produto-similares" style="grid-template-columns:repeat(5,1fr);"></div>
+      </div>
+    </div>
+
+    
+    <!-- PERFIL DO DOADOR -->
+    <div class="screen" id="screen-perfil">
+      <div class="topbar">
+        <div class="brand-mini">
+          <span style="background:#fff; border-radius:8px; padding:3px; display:inline-flex;">
+            <img src="/assets/logo.png" alt="Repassa" style="width:24px;height:auto;display:block;">
+          </span>
+          <span>Repassa</span>
+        </div>
+        <div class="navlinks">
+          <span>Categorias</span><span>Marcas</span><span>Produtos semi-novos</span>
+        </div>
+        <div class="searchbar">
+          <span>🔍</span>
+          <input placeholder="Pesquisar item…" value="Iphone">
+          <button>Pesquisar</button>
+        </div>
+        <div class="icons">🛒 ☰</div>
+      </div>
+
+      <div class="perfil-body" id="perfil-body">
+        <div class="back-row" onclick="goTo('produto')">← Voltar ao produto</div>
+
+        <div class="perfil-hero">
+          <div class="perfil-avatar">MC</div>
+          <div class="perfil-hero-info">
+            <h2>Marina Costa</h2>
+            <p class="since">Doadora desde Março de 2024 · São José dos Campos, SP</p>
+            <div class="perfil-badges">
+              <span class="perfil-badge">✓ Identidade verificada</span>
+              <span class="perfil-badge">✓ CPF confirmado</span>
+              <span class="perfil-badge">⚡ Responde rápido</span>
+            </div>
+          </div>
+          <div class="perfil-stars">
+            <div class="num">4.9</div>
+            <div class="stars">★★★★★</div>
+            <div class="count">32 avaliações</div>
+          </div>
+        </div>
+
+        <div class="perfil-grid">
+          <div class="perfil-card">
+            <h4>Resumo</h4>
+            <div class="perfil-stat-row"><span class="label">Itens doados</span><span class="value">18</span></div>
+            <div class="perfil-stat-row"><span class="label">Doações concluídas</span><span class="value">16</span></div>
+            <div class="perfil-stat-row"><span class="label">Tempo médio de resposta</span><span class="value">~2 horas</span></div>
+            <div class="perfil-stat-row"><span class="label">Taxa de confirmação</span><span class="value">96%</span></div>
+            <h4 style="margin-top:20px;">Sobre</h4>
+            <p class="perfil-about">Gosto de dar um novo destino pra coisas que ainda estão em bom estado. Prefiro combinar retirada durante a semana, à tarde.</p>
+          </div>
+
+          <div class="perfil-card">
+            <h4>Avaliações de quem já recebeu</h4>
+            <div class="review">
+              <div class="review-top"><span class="who">João P.</span><span class="stars">★★★★★</span></div>
+              <p>Item exatamente como descrito, Marina foi super atenciosa na entrega.</p>
+            </div>
+            <div class="review">
+              <div class="review-top"><span class="who">Ana L.</span><span class="stars">★★★★★</span></div>
+              <p>Combinamos tudo rapidinho pelo chat, retirada tranquila.</p>
+            </div>
+            <div class="review">
+              <div class="review-top"><span class="who">Pedro S.</span><span class="stars">★★★★☆</span></div>
+              <p>Muito solícita, só demorou um pouco pra confirmar o horário.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="perfil-items">
+          <h3>Outros itens desta doadora</h3>
+          <div class="card-grid" id="grid-perfil-itens"></div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- CARRINHO -->
+    <div class="screen" id="screen-carrinho">
+      <div class="topbar">
+        <div class="brand-mini">
+          <span style="background:#fff; border-radius:8px; padding:3px; display:inline-flex;">
+            <img src="/assets/logo.png" alt="Repassa" style="width:24px;height:auto;display:block;">
+          </span>
+          <span>Repassa</span>
+        </div>
+        <div class="icons">🛒 ☰</div>
+      </div>
+
+      <div class="carrinho-body" id="carrinho-body">
+        <h2 class="carrinho-title">Seu carrinho</h2>
+        <div class="carrinho-layout">
+          <div>
+            <div class="carrinho-item">
+              <div class="carrinho-thumb">📱</div>
+              <div class="carrinho-info">
+                <p class="name">iPhone 7, 256GB, Preto Brilhante</p>
+                <p class="meta">Semi-novo · Retirada em São José dos Campos, SP</p>
+                <span class="carrinho-status"><span class="dot"></span> Solicitação enviada — aguardando aprovação</span>
+                <div class="carrinho-donor">
+                  <div class="mini-avatar">MC</div>
+                  <span class="who">Marina Costa</span>
+                  <a onclick="goTo('perfil')">Ver perfil →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="carrinho-summary">
+            <h4>Resumo da solicitação</h4>
+            <div class="summary-row"><span>Item</span><span>Gratuito</span></div>
+            <div class="summary-row"><span>Frete / retirada</span><span>Combinar com doador</span></div>
+            <div class="summary-row"><span>Taxa da plataforma</span><span>R$ 0,00</span></div>
+            <div class="summary-row total"><span>Total</span><span>R$ 0,00</span></div>
+            <button class="btn-primary" onclick="goTo('tracking')">Confirmar retirada</button>
+            <p class="carrinho-note">A Repassa é 100% gratuita. Ao confirmar, você poderá acompanhar a retirada em tempo real por segurança.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- RASTREAMENTO -->
+    <div class="screen" id="screen-tracking">
+      <div class="topbar">
+        <div class="brand-mini">
+          <span style="background:#fff; border-radius:8px; padding:3px; display:inline-flex;">
+            <img src="/assets/logo.png" alt="Repassa" style="width:24px;height:auto;display:block;">
+          </span>
+          <span>Repassa</span>
+        </div>
+      </div>
+
+      <div class="tracking-layout">
+        <div class="tracking-map" id="tracking-map">
+          <div class="eta-chip">
+            <div class="big">12 min</div>
+            <div class="small">até você chegar ao local de retirada</div>
+          </div>
+          <svg viewBox="0 0 600 500" preserveAspectRatio="none">
+            <path d="M 120 380 C 220 340, 260 260, 320 220 S 430 140, 470 100"
+                  fill="none" stroke="#75C550" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round"/>
+          </svg>
+          <div class="map-pin you" style="left:120px; top:380px;">
+            <div class="dot"></div>
+            <div class="lbl">Você</div>
+          </div>
+          <div class="map-pin donor" style="left:470px; top:100px;">
+            <div class="dot"></div>
+            <div class="lbl">Marina (doadora)</div>
+          </div>
+          <div class="courier-marker" style="left:280px; top:250px;">🧍</div>
+        </div>
+
+        <div class="tracking-panel" id="tracking-panel">
+          <h3>A caminho da retirada</h3>
+          <p class="sub">iPhone 7, 256GB · com Marina Costa</p>
+
+          <div class="safety-code">
+            <div class="label">Código de segurança da retirada</div>
+            <div class="code">4 8 1 2</div>
+            <div class="hint">Mostre este código à doadora para confirmar sua identidade</div>
+          </div>
+
+          <ul class="track-steps">
+            <li class="done"><span class="bullet">✓</span><div class="txt"><div class="t1">Solicitação aprovada</div><div class="t2">Marina confirmou sua retirada</div></div></li>
+            <li class="active"><span class="bullet">●</span><div class="txt"><div class="t1">Você está a caminho</div><div class="t2">Localização compartilhada em tempo real</div></div></li>
+            <li class="pending"><span class="bullet">3</span><div class="txt"><div class="t1">Retirada confirmada</div><div class="t2">Ambos confirmam com o código de segurança</div></div></li>
+            <li class="pending"><span class="bullet">4</span><div class="txt"><div class="t1">Avaliação</div><div class="t2">Avalie como foi a experiência</div></div></li>
+          </ul>
+
+          <div class="tracking-donor-card">
+            <div class="mini-avatar">MC</div>
+            <div class="info">
+              <div class="name">Marina Costa</div>
+              <div class="plate">★ 4.9 · Identidade verificada</div>
+            </div>
+            <button class="action" title="Chamar">📞</button>
+            <button class="action" title="Mensagem">💬</button>
+          </div>
+
+          <div class="tracking-actions">
+            <button class="btn-primary btn-ghost">Compartilhar trajeto</button>
+            <button class="btn-primary">Cheguei</button>
+          </div>
+          <div class="safety-footer">🛡️ Sua localização é compartilhada só durante a retirada, com você e a doadora.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. FORMULÁRIO -->
+    <div class="screen" id="screen-form">
+      <div class="form-card-head">
+        <h2>Formulário para recebimento do item</h2>
+        <span class="step" id="form-item-label">iPhone 7 · Semi-novo</span>
+      </div>
+      <p id="form-msg" style="min-height:16px; text-align:center; font-size:12.5px; color:#FFD9C7; margin:-10px 0 6px;"></p>
+      <div class="form-grid">
+        <div class="field"><label class="field-label">Qual é a situação profissional atual?</label><input class="pill-input" id="f-profissao" placeholder="Ex: desempregado, autônomo…"></div>
+        <div class="field"><label class="field-label">Qual seu endereço?</label><input class="pill-input" id="f-endereco" placeholder="Rua, número, bairro"></div>
+        <div class="field"><label class="field-label">Qual é a renda familiar total aproximada?</label><input class="pill-input" id="f-renda" placeholder="Ex: R$ 1.500"></div>
+        <div class="field"><label class="field-label">Você mora perto do endereço residencial deste doador?</label><input class="pill-input" id="f-perto" placeholder="Sim / Não — distância aproximada"></div>
+        <div class="field full">
+          <label class="field-label">Por que você precisa deste item e como ele vai te ajudar?</label>
+          <textarea class="pill-input" id="f-motivo" placeholder="Descreva aqui brevemente seu motivo…"></textarea>
+        </div>
+        <div class="field full">
+          <label class="field-label">Se o item precisar de algum pequeno conserto, transporte ou manutenção, você tem condições de retirar/arcar?</label>
+          <input class="pill-input" id="f-conserto" placeholder="Sim / Não">
+        </div>
+        <div class="declare-row">
+          <input type="checkbox" id="declare">
+          <p>Declaro que preciso deste item para uso próprio. A revenda é proibida e sujeita ao banimento permanente da conta e bloqueio do CPF no sistema.</p>
+        </div>
+        <div class="form-submit"><button class="btn-primary" onclick="enviarFormulario()">Enviar solicitação</button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<script src="js/app.js"></script>
+</body>
+</html>
