@@ -1,0 +1,23 @@
+<div class="site-nav">
+  <a class="wordmark" href="<%= user ? '/busca' : '/login' %>">
+    <img src="/assets/logo.png" alt="Repassa">
+    Repassa
+  </a>
+  <% if (user) { %>
+    <div class="nav-links">
+      <a href="/busca" class="<%= typeof current !== 'undefined' && current === 'busca' ? 'current' : '' %>">Buscar</a>
+      <a href="/carrinho" class="<%= typeof current !== 'undefined' && current === 'carrinho' ? 'current' : '' %>">Carrinho</a>
+      <a href="/perfil" class="<%= typeof current !== 'undefined' && current === 'perfil' ? 'current' : '' %>">Meu perfil</a>
+    </div>
+    <div class="nav-right">
+      <span>Olá, <%= user.nome.split(' ')[0] %></span>
+      <form class="logout-form" method="POST" action="/logout">
+        <button class="logout-link" type="submit">Sair</button>
+      </form>
+    </div>
+  <% } else { %>
+    <div class="nav-right">
+      <a class="btn-nav" href="/login">Entrar</a>
+    </div>
+  <% } %>
+</div>

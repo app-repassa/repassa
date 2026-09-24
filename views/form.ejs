@@ -1,0 +1,38 @@
+<%- include('partials/head', {title:'Formulário de solicitação'}) %>
+<%- include('partials/nav', {user, current:'busca'}) %>
+
+<div class="page-shell">
+  <% if (typeof erro !== 'undefined' && erro) { %>
+    <div class="flash"><p><%= erro %></p></div>
+  <% } %>
+
+  <div class="page-frame" id="screen-form">
+    <div class="form-card-head">
+      <h2>Formulário para recebimento do item</h2>
+      <span class="step"><%= item.nome %> · <%= item.tag %></span>
+    </div>
+    <form method="POST" action="/form/<%= item.id %>">
+      <div class="form-grid">
+        <div class="field"><label class="field-label">Qual é a situação profissional atual?</label><input class="pill-input" name="profissao" placeholder="Ex: desempregado, autônomo…"></div>
+        <div class="field"><label class="field-label">Qual seu endereço?</label><input class="pill-input" name="endereco" placeholder="Rua, número, bairro"></div>
+        <div class="field"><label class="field-label">Qual é a renda familiar total aproximada?</label><input class="pill-input" name="renda" placeholder="Ex: R$ 1.500"></div>
+        <div class="field"><label class="field-label">Você mora perto do endereço residencial deste doador?</label><input class="pill-input" name="perto" placeholder="Sim / Não — distância aproximada"></div>
+        <div class="field full">
+          <label class="field-label">Por que você precisa deste item e como ele vai te ajudar?</label>
+          <textarea class="pill-input" name="motivo" placeholder="Descreva aqui brevemente seu motivo…"></textarea>
+        </div>
+        <div class="field full">
+          <label class="field-label">Se o item precisar de algum pequeno conserto, transporte ou manutenção, você tem condições de retirar/arcar?</label>
+          <input class="pill-input" name="conserto" placeholder="Sim / Não">
+        </div>
+        <div class="declare-row">
+          <input type="checkbox" id="declare" name="declare" required>
+          <p>Declaro que preciso deste item para uso próprio. A revenda é proibida e sujeita ao banimento permanente da conta e bloqueio do CPF no sistema.</p>
+        </div>
+        <div class="form-submit"><button class="btn-primary" type="submit">Enviar solicitação</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

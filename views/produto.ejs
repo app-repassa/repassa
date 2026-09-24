@@ -1,0 +1,51 @@
+<%- include('partials/head', {title:item.nome}) %>
+<%- include('partials/nav', {user, current:'busca'}) %>
+
+<div class="page-shell">
+  <div class="page-frame">
+    <div class="produto-body">
+      <a class="back-row" href="/busca" style="text-decoration:none;">← Voltar</a>
+      <div class="produto-main">
+        <div class="produto-photo">
+          <div class="phone-mock"><div class="screen-mock"><%= item.icon %></div></div>
+        </div>
+        <div class="produto-panel">
+          <h2><%= item.nome %><%= item.variante ? ', ' + item.variante : '' %></h2>
+          <% if (item.doador) { %>
+            <p style="font-size:12.5px; color:var(--forest); font-weight:600; margin:-6px 0 14px;">
+              👤 Doado por <a href="/doador/<%= item.doador.id %>" style="color:var(--forest);">
+                <%= item.doador.nome %> · ★ <%= item.doador.nota %> — ver perfil
+              </a>
+            </p>
+          <% } %>
+          <h4>Informações técnicas</h4>
+          <p style="font-size:13.5px; color:var(--ink); margin:0 0 4px; font-weight:600;">Características:</p>
+          <ul>
+            <% item.caracteristicas.forEach(function(c){ %><li><%= c %></li><% }); %>
+          </ul>
+          <p style="font-size:13.5px; color:var(--ink); margin:14px 0 4px; font-weight:600;">Especificações:</p>
+          <ul>
+            <% item.especificacoes.forEach(function(e){ %><li><%= e %></li><% }); %>
+          </ul>
+          <a class="btn-primary" href="/form/<%= item.id %>" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Preencher formulário</a>
+        </div>
+      </div>
+
+      <p class="similar-heading">Produtos similares</p>
+      <div class="card-grid" style="grid-template-columns:repeat(5,1fr);">
+        <% outrosDoDoador.slice(0,5).forEach(function(it){ %>
+          <a class="item-card" href="/produto/<%= it.id %>" style="text-decoration:none; color:inherit;">
+            <div class="item-thumb"><%= it.icon %></div>
+            <div class="item-info">
+              <span class="tag"><%= it.tag %></span>
+              <p class="name"><%= it.nome %></p>
+              <p class="loc"><%= it.loc %></p>
+            </div>
+          </a>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

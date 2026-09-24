@@ -1,0 +1,52 @@
+<%- include('partials/head', {title:'Cadastro'}) %>
+
+<div class="page-shell">
+  <% if (typeof erro !== 'undefined' && erro) { %>
+    <div class="flash"><p><%= erro %></p></div>
+  <% } %>
+
+  <div class="page-frame" id="screen-cadastro">
+    <div class="cadastro-head">
+      <div class="brand-mini">
+        <img src="/assets/logo.png" alt="Repassa" style="width:34px;height:auto;">
+        <span>Repassa</span>
+      </div>
+      <div class="role-toggle">
+        <button type="button" class="<%= tipo !== 'donatario' ? 'active' : '' %>" id="rt-doador" onclick="setRole('doador')">Doador</button>
+        <button type="button" class="<%= tipo === 'donatario' ? 'active' : '' %>" id="rt-donatario" onclick="setRole('donatario')">Donatário</button>
+      </div>
+    </div>
+
+    <form method="POST" action="/cadastro">
+      <input type="hidden" name="tipo" id="tipo-input" value="<%= tipo === 'donatario' ? 'donatario' : 'doador' %>">
+      <div class="cad-grid">
+        <div class="field"><label class="field-label">Nome completo</label><input class="pill-input" name="nome" placeholder="Seu nome" required></div>
+        <div class="field"><label class="field-label">Idade</label><input class="pill-input" name="idade" type="number" placeholder="Ex: 34"></div>
+        <div class="field"><label class="field-label">CPF</label><input class="pill-input" name="cpf" placeholder="000.000.000-00"></div>
+        <div class="field"><label class="field-label">Telefone</label><input class="pill-input" name="telefone" placeholder="(00) 00000-0000"></div>
+        <div class="field full"><label class="field-label">Email</label><input class="pill-input" name="email" type="email" placeholder="voce@email.com" required></div>
+        <div class="field field-relative"><label class="field-label">Senha</label><input class="pill-input" id="cad-senha" name="senha" type="password" placeholder="••••••••" required minlength="4"><span class="eye" onclick="togglePw('cad-senha', this)">👁</span></div>
+        <div class="field field-relative"><label class="field-label">Confirme sua senha</label><input class="pill-input" id="cad-confirmar" name="confirmar" type="password" placeholder="••••••••" required minlength="4"><span class="eye" onclick="togglePw('cad-confirmar', this)">👁</span></div>
+      </div>
+      <div class="cad-submit"><button class="btn-primary" id="cad-btn" type="submit">Cadastrar como <%= tipo === 'donatario' ? 'donatário' : 'doador' %></button></div>
+      <p class="helper-note">Ao continuar, você concorda com os termos de uso da Repassa.</p>
+    </form>
+  </div>
+</div>
+
+<script>
+function togglePw(id, el){
+  const input = document.getElementById(id);
+  const isPw = input.type === 'password';
+  input.type = isPw ? 'text' : 'password';
+  el.textContent = isPw ? '🙈' : '👁';
+}
+function setRole(role){
+  document.getElementById('rt-doador').classList.toggle('active', role==='doador');
+  document.getElementById('rt-donatario').classList.toggle('active', role==='donatario');
+  document.getElementById('tipo-input').value = role;
+  document.getElementById('cad-btn').textContent = role==='doador' ? 'Cadastrar como doador' : 'Cadastrar como donatário';
+}
+</script>
+
+<%- include('partials/foot') %>

@@ -1,0 +1,48 @@
+<%- include('partials/head', {title:'Meu perfil'}) %>
+<%- include('partials/nav', {user, current:'perfil'}) %>
+
+<div class="page-shell">
+  <div class="page-frame">
+    <div class="perfil-body">
+      <div class="perfil-hero">
+        <div class="perfil-avatar"><%= iniciais %></div>
+        <div class="perfil-hero-info">
+          <h2><%= user.nome %></h2>
+          <p class="since">
+            <%= user.tipo === 'doador' ? '🎁 Conta de Doador(a)' : '🤝 Conta de Donatário(a)' %>
+            · Membro desde <%= membroDesde %>
+          </p>
+          <div class="perfil-badges">
+            <span class="perfil-badge">✓ Email verificado</span>
+            <% if (user.cpf) { %><span class="perfil-badge">✓ CPF cadastrado</span><% } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="perfil-grid">
+        <div class="perfil-card">
+          <h4>Meus dados</h4>
+          <div class="perfil-stat-row"><span class="label">Nome</span><span class="value"><%= user.nome %></span></div>
+          <div class="perfil-stat-row"><span class="label">Email</span><span class="value"><%= user.email %></span></div>
+          <div class="perfil-stat-row"><span class="label">Telefone</span><span class="value"><%= user.telefone || '—' %></span></div>
+          <div class="perfil-stat-row"><span class="label">CPF</span><span class="value"><%= user.cpf || '—' %></span></div>
+          <div class="perfil-stat-row"><span class="label">Idade</span><span class="value"><%= user.idade || '—' %></span></div>
+          <div class="perfil-stat-row"><span class="label">Tipo de conta</span><span class="value"><%= user.tipo === 'doador' ? 'Doador(a)' : 'Donatário(a)' %></span></div>
+        </div>
+
+        <div class="perfil-card">
+          <% if (user.tipo === 'doador') { %>
+            <h4>Meus itens doados</h4>
+            <p class="perfil-about">O cadastro de itens para doação ainda está em construção nesta versão do site. Em breve você poderá listar aqui o que está doando e acompanhar os pedidos recebidos.</p>
+          <% } else { %>
+            <h4>Minhas solicitações</h4>
+            <p class="perfil-about">Acompanhe os itens que você pediu, o status de cada pedido e o rastreamento da retirada.</p>
+            <a class="btn-primary" href="/carrinho" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box; margin-top:14px;">Ver meu carrinho</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

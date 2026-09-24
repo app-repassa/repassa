@@ -1,0 +1,61 @@
+<%- include('partials/head', {title:'Carrinho'}) %>
+<%- include('partials/nav', {user, current:'carrinho'}) %>
+
+<div class="page-shell">
+  <div class="page-frame">
+    <div class="carrinho-body">
+      <h2 class="carrinho-title">Seu carrinho</h2>
+
+      <% if (!pedidos.length) { %>
+        <p style="font-size:13.5px; color:var(--ink-soft);">
+          Você ainda não tem nenhuma solicitação.
+          <a href="/busca" style="color:var(--forest); font-weight:600;">Buscar itens →</a>
+        </p>
+      <% } else { %>
+        <% const statusLabel = {
+          pendente: 'Solicitação enviada — aguardando aprovação',
+          a_caminho: 'Retirada confirmada — em andamento',
+          concluido: 'Retirada concluída'
+        }; %>
+        <div class="carrinho-layout">
+          <div>
+            <% pedidos.forEach(function(pedido){ const item = pedido.item; const donor = item.doador; %>
+              <div class="carrinho-item">
+                <div class="carrinho-thumb"><%= item.icon %></div>
+                <div class="carrinho-info">
+                  <p class="name"><%= item.nome %><%= item.variante ? ', ' + item.variante : '' %></p>
+                  <p class="meta"><%= item.tag %> · Retirada em <%= item.loc %></p>
+                  <span class="carrinho-status"><span class="dot"></span> <%= statusLabel[pedido.status] %></span>
+                  <div class="carrinho-donor">
+                    <div class="mini-avatar"><%= donor.avatar %></div>
+                    <span class="who"><%= donor.nome %></span>
+                    <a href="/doador/<%= donor.id %>">Ver perfil →</a>
+                  </div>
+                  <% if (pedido.status === 'pendente') { %>
+                    <form method="POST" action="/carrinho/<%= pedido.id %>/confirmar">
+                      <button class="btn-primary" style="margin-top:12px;" type="submit">Confirmar retirada</button>
+                    </form>
+                  <% } else if (pedido.status === 'a_caminho') { %>
+                    <a class="btn-primary" href="/tracking/<%= pedido.id %>" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box; margin-top:12px;">Ver rastreamento</a>
+                  <% } else { %>
+                    <span class="carrinho-status" style="background:#DFF3E3;"><span class="dot"></span> Concluído</span>
+                  <% } %>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+
+          <div class="carrinho-summary">
+            <h4>Resumo</h4>
+            <div class="summary-row"><span>Itens</span><span><%= pedidos.length %></span></div>
+            <div class="summary-row"><span>Taxa da plataforma</span><span>R$ 0,00</span></div>
+            <div class="summary-row total"><span>Total</span><span>R$ 0,00</span></div>
+            <p class="carrinho-note">A Repassa é 100% gratuita. Ao confirmar, você poderá acompanhar a retirada em tempo real por segurança.</p>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

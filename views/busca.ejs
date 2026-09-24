@@ -1,0 +1,51 @@
+<%- include('partials/head', {title:'Buscar itens'}) %>
+<%- include('partials/nav', {user, current:'busca'}) %>
+
+<div class="page-shell">
+  <div class="page-frame" id="screen-busca">
+    <div class="busca-body">
+      <div class="filters">
+        <h3>Filtros</h3>
+        <form method="GET" action="/busca">
+          <div class="field"><label class="field-label">Buscar</label><input class="pill-input" name="q" placeholder="Ex: iPhone" value="<%= q || '' %>"></div>
+          <div class="field"><label class="field-label">Local</label><input class="pill-input" name="local" placeholder="Cidade" value="<%= local || '' %>"></div>
+          <button class="btn-primary" type="submit">Pesquisar</button>
+        </form>
+      </div>
+      <div class="results">
+        <h3><%= q ? `Resultados para "${q}"` : 'Com base na sua pesquisa' %></h3>
+        <div class="card-grid">
+          <% (principais.length ? principais : items.slice(0,3)).forEach(function(it){ %>
+            <a class="item-card" href="/produto/<%= it.id %>" style="text-decoration:none; color:inherit;">
+              <div class="item-thumb"><%= it.icon %></div>
+              <div class="item-info">
+                <span class="tag"><%= it.tag %></span>
+                <p class="name"><%= it.nome %></p>
+                <p class="loc"><%= it.loc %></p>
+              </div>
+            </a>
+          <% }); %>
+          <% if (!principais.length && !items.length) { %>
+            <p style="font-size:12.5px; color:var(--ink-soft);">Nenhum item encontrado.</p>
+          <% } %>
+        </div>
+
+        <h3>Produtos similares</h3>
+        <div class="card-grid">
+          <% similares.forEach(function(it){ %>
+            <a class="item-card" href="/produto/<%= it.id %>" style="text-decoration:none; color:inherit;">
+              <div class="item-thumb"><%= it.icon %></div>
+              <div class="item-info">
+                <span class="tag"><%= it.tag %></span>
+                <p class="name"><%= it.nome %></p>
+                <p class="loc"><%= it.loc %></p>
+              </div>
+            </a>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

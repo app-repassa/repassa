@@ -1,0 +1,70 @@
+<%- include('partials/head', {title:'Rastreamento'}) %>
+<%- include('partials/nav', {user, current:'carrinho'}) %>
+
+<div class="page-shell">
+  <div class="page-frame">
+    <div class="tracking-layout">
+      <div class="tracking-map">
+        <div class="eta-chip">
+          <div class="big"><%= finished ? 'Concluído' : '12 min' %></div>
+          <div class="small"><%= finished ? 'retirada finalizada' : 'até você chegar ao local de retirada' %></div>
+        </div>
+        <svg viewBox="0 0 600 500" preserveAspectRatio="none">
+          <path d="M 120 380 C 220 340, 260 260, 320 220 S 430 140, 470 100"
+                fill="none" stroke="#75C550" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round"/>
+        </svg>
+        <div class="map-pin you" style="left:120px; top:380px;">
+          <div class="dot"></div>
+          <div class="lbl">Você</div>
+        </div>
+        <div class="map-pin donor" style="left:470px; top:100px;">
+          <div class="dot"></div>
+          <div class="lbl"><%= donor.nome.split(' ')[0] %> (doador(a))</div>
+        </div>
+        <div class="courier-marker" style="left:280px; top:250px;">🧍</div>
+      </div>
+
+      <div class="tracking-panel">
+        <h3><%= finished ? 'Retirada concluída' : 'A caminho da retirada' %></h3>
+        <p class="sub"><%= item.nome %><%= item.variante ? ', ' + item.variante : '' %> · com <%= donor.nome %></p>
+
+        <div class="safety-code">
+          <div class="label">Código de segurança da retirada</div>
+          <div class="code"><%= pedido.code.split('').join(' ') %></div>
+          <div class="hint">Mostre este código à pessoa doadora para confirmar sua identidade</div>
+        </div>
+
+        <ul class="track-steps">
+          <li class="done"><span class="bullet">✓</span><div class="txt"><div class="t1">Solicitação aprovada</div><div class="t2"><%= donor.nome.split(' ')[0] %> confirmou sua retirada</div></div></li>
+          <li class="<%= finished ? 'done' : 'active' %>"><span class="bullet"><%= finished ? '✓' : '●' %></span><div class="txt"><div class="t1">Você está a caminho</div><div class="t2">Localização compartilhada em tempo real</div></div></li>
+          <li class="<%= finished ? 'done' : 'pending' %>"><span class="bullet"><%= finished ? '✓' : '3' %></span><div class="txt"><div class="t1">Retirada confirmada</div><div class="t2">Ambos confirmam com o código de segurança</div></div></li>
+          <li class="pending"><span class="bullet">4</span><div class="txt"><div class="t1">Avaliação</div><div class="t2">Avalie como foi a experiência</div></div></li>
+        </ul>
+
+        <div class="tracking-donor-card">
+          <div class="mini-avatar"><%= donor.avatar %></div>
+          <div class="info">
+            <div class="name"><%= donor.nome %></div>
+            <div class="plate">★ <%= donor.nota %> · Identidade verificada</div>
+          </div>
+          <button class="action" type="button" title="Chamar" onclick="alert('Ligação simulada nesta versão.')">📞</button>
+          <button class="action" type="button" title="Mensagem" onclick="alert('Chat simulado nesta versão.')">💬</button>
+        </div>
+
+        <div class="tracking-actions">
+          <button class="btn-primary btn-ghost" type="button" onclick="alert('Link de acompanhamento copiado (simulado).')">Compartilhar trajeto</button>
+          <% if (finished) { %>
+            <a class="btn-primary" href="/carrinho" style="text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; box-sizing:border-box;">Voltar ao carrinho</a>
+          <% } else { %>
+            <form method="POST" action="/tracking/<%= pedido.id %>/chegou" style="flex:1;">
+              <button class="btn-primary" type="submit" style="width:100%;">Cheguei</button>
+            </form>
+          <% } %>
+        </div>
+        <div class="safety-footer">🛡️ Sua localização é compartilhada só durante a retirada, com você e a doadora.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

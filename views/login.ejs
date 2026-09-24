@@ -1,0 +1,56 @@
+<%- include('partials/head', {title:'Entrar'}) %>
+
+<div class="page-shell">
+  <% if (typeof erro !== 'undefined' && erro) { %>
+    <div class="flash"><p><%= erro %></p></div>
+  <% } %>
+
+  <div class="page-frame" id="screen-login">
+    <div class="login-visual">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="login-logo" style="padding:0; overflow:hidden;">
+        <img src="/assets/logo.png" alt="Repassa" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+    <div class="login-form-wrap">
+      <div class="login-form">
+        <h2>Entre com seu cadastro</h2>
+        <form method="POST" action="/login">
+          <div class="field">
+            <label class="field-label">Email</label>
+            <input class="pill-input" id="login-email" name="email" type="email" placeholder="voce@email.com" required>
+          </div>
+          <div class="field field-relative">
+            <label class="field-label">Senha</label>
+            <input class="pill-input" id="login-senha" name="senha" type="password" placeholder="••••••••" required>
+            <span class="eye" onclick="togglePw('login-senha', this)">👁</span>
+          </div>
+          <div class="row-links"><a href="#" onclick="alert('Nesta versão ainda não há recuperação de senha real.'); return false;">Esqueci a senha</a></div>
+          <button class="btn-primary" type="submit">Entrar</button>
+        </form>
+        <div class="signup-note">
+          <strong>Não tem uma conta? Faça seu cadastro como:</strong>
+          <div class="role-pick">
+            <a href="/cadastro?tipo=doador">Doador</a>
+            <a href="/cadastro?tipo=donatario">Donatário</a>
+          </div>
+        </div>
+        <p style="text-align:center; font-size:11.5px; color:var(--ink-soft); margin-top:18px;">
+          Conta de teste: <strong>ingrid.lacerd@gmail.com</strong> / senha <strong>123456</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePw(id, el){
+  const input = document.getElementById(id);
+  const isPw = input.type === 'password';
+  input.type = isPw ? 'text' : 'password';
+  el.textContent = isPw ? '🙈' : '👁';
+}
+</script>
+
+<%- include('partials/foot') %>

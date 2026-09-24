@@ -1,0 +1,68 @@
+<%- include('partials/head', {title:donor.nome}) %>
+<%- include('partials/nav', {user, current:'busca'}) %>
+
+<div class="page-shell">
+  <div class="page-frame">
+    <div class="perfil-body">
+      <a class="back-row" href="javascript:history.back()" style="text-decoration:none;">← Voltar</a>
+
+      <div class="perfil-hero">
+        <div class="perfil-avatar"><%= donor.avatar %></div>
+        <div class="perfil-hero-info">
+          <h2><%= donor.nome %></h2>
+          <p class="since">Doador(a) desde <%= donor.desde %> · <%= donor.local %></p>
+          <div class="perfil-badges">
+            <span class="perfil-badge">✓ Identidade verificada</span>
+            <span class="perfil-badge">✓ CPF confirmado</span>
+            <span class="perfil-badge">⚡ Responde rápido</span>
+          </div>
+        </div>
+        <div class="perfil-stars">
+          <div class="num"><%= donor.nota %></div>
+          <div class="stars">★★★★★</div>
+          <div class="count"><%= donor.avaliacoes %> avaliações</div>
+        </div>
+      </div>
+
+      <div class="perfil-grid">
+        <div class="perfil-card">
+          <h4>Resumo</h4>
+          <div class="perfil-stat-row"><span class="label">Itens doados</span><span class="value"><%= donor.itensDoados %></span></div>
+          <div class="perfil-stat-row"><span class="label">Doações concluídas</span><span class="value"><%= donor.doacoesConcluidas %></span></div>
+          <div class="perfil-stat-row"><span class="label">Tempo médio de resposta</span><span class="value"><%= donor.tempoResposta %></span></div>
+          <div class="perfil-stat-row"><span class="label">Taxa de confirmação</span><span class="value"><%= donor.taxaConfirmacao %></span></div>
+          <h4 style="margin-top:20px;">Sobre</h4>
+          <p class="perfil-about"><%= donor.sobre %></p>
+        </div>
+
+        <div class="perfil-card">
+          <h4>Avaliações de quem já recebeu</h4>
+          <% donor.reviews.forEach(function(r){ %>
+            <div class="review">
+              <div class="review-top"><span class="who"><%= r.who %></span><span class="stars"><%= '★'.repeat(r.stars) + '☆'.repeat(5-r.stars) %></span></div>
+              <p><%= r.text %></p>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <div class="perfil-items">
+        <h3>Outros itens deste doador(a)</h3>
+        <div class="card-grid">
+          <% itens.forEach(function(it){ %>
+            <a class="item-card" href="/produto/<%= it.id %>" style="text-decoration:none; color:inherit;">
+              <div class="item-thumb"><%= it.icon %></div>
+              <div class="item-info">
+                <span class="tag"><%= it.tag %></span>
+                <p class="name"><%= it.nome %></p>
+                <p class="loc"><%= it.loc %></p>
+              </div>
+            </a>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>
