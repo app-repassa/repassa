@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repassa · Sistema Unificado</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/demo.css">
+
+</head>
+<body>
+
+<!-- Navegação Fixa Superior (Oculta no Login e Cadastro) -->
+<nav class="demo-nav hidden" id="main-nav">
+  <div class="logo-area" onclick="showScreen('screen-busca')">
+    <img data-icon="logo" src="assets/logo.png" alt="Repassa" style="width:24px;height:24px;object-fit:contain;" onerror="this.style.display='none'">
+    <span>Repassa</span>
+  </div>
+  <div class="nav-links">
+    <button id="btn-nav-busca" onclick="showScreen('screen-busca')"><img class="ico" data-icon="busca" alt=""> Buscar</button>
+    <button id="btn-nav-notif" onclick="showScreen('screen-notificacoes')"><img class="ico" data-icon="avisos" alt=""> Avisos <span class="nav-badge" id="notif-badge">2</span></button>
+    <button id="btn-nav-chat" onclick="showScreen('screen-chat')"><img class="ico" data-icon="mensagens" alt=""> Mensagens</button>
+    <button id="btn-nav-carrinho" onclick="showScreen('screen-carrinho')"><img class="ico" data-icon="carrinho" alt=""> Carrinho</button>
+    <button id="btn-nav-tracking" onclick="showScreen('screen-tracking')"><img class="ico" data-icon="rastreamento" alt=""> Rastreamento</button>
+    <button id="btn-nav-perfil" onclick="showScreen('screen-perfil')"><img class="ico" data-icon="perfil" alt=""> Perfil</button>
+    <button id="btn-nav-login" onclick="showScreen('screen-login')"><img class="ico" data-icon="sair" alt=""> Sair</button>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+  <!-- ================= 1. LOGIN ================= -->
+  <div class="page-frame view-screen active" id="screen-login">
+    <div class="login-visual">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="login-logo" style="padding:0; overflow:hidden;">
+        <img data-icon="logo" src="assets/logo.png" alt="Repassa" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/150?text=Repassa'">
+      </div>
+    </div>
+    <div class="login-form-wrap">
+      <div class="login-form">
+        <h2>Entre com seu cadastro</h2>
+        <form onsubmit="handleLogin(event)">
+          <div class="field">
+            <label class="field-label">Email</label>
+            <input class="pill-input" id="login-email" type="email" value="ingrid.lacerd@gmail.com" required>
+          </div>
+          <div class="field field-relative">
+            <label class="field-label">Senha</label>
+            <input class="pill-input" id="login-senha" type="password" value="123456" required>
+            <span class="eye" onclick="togglePw('login-senha', this)"><img class="ico" data-icon="olho" alt=""></span>
+          </div>
+          <div class="row-links"><a href="#" onclick="alert('Na demonstração a senha é fictícia.'); return false;">Esqueci a senha</a></div>
+          <button class="btn-primary-login" type="submit" style="margin-top:12px;">Entrar</button>
+        </form>
+        <div class="signup-note">
+          <strong>Não tem uma conta? Faça seu cadastro como:</strong>
+          <div class="role-pick" style="margin-top:8px; display:flex; gap:8px;">
+            <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="setCadastroRole('doador')">Doador</button>
+            <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="setCadastroRole('donatario')">Donatário</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 2. CADASTRO ================= -->
+  <div class="page-frame view-screen" id="screen-cadastro">
+    <div class="cadastro-head">
+      <div class="brand-mini">
+        <span>Repassa</span>
+      </div>
+      <div class="role-toggle">
+        <button type="button" class="active" id="rt-doador" onclick="setRole('doador')">Doador</button>
+        <button type="button" id="rt-donatario" onclick="setRole('donatario')">Donatário</button>
+      </div>
+    </div>
+
+    <form onsubmit="handleCadastro(event)">
+      <div class="cad-grid">
+        <div class="field"><label class="field-label">Nome completo</label><input class="pill-input" id="cad-nome" placeholder="Seu nome" required></div>
+        <div class="field"><label class="field-label">Idade</label><input class="pill-input" id="cad-idade" type="number" placeholder="Ex: 34"></div>
+        <div class="field"><label class="field-label">CPF</label><input class="pill-input" id="cad-cpf" placeholder="000.000.000-00"></div>
+        <div class="field"><label class="field-label">Telefone</label><input class="pill-input" id="cad-telefone" placeholder="(00) 00000-0000"></div>
+        <div class="field full"><label class="field-label">Email</label><input class="pill-input" id="cad-email" type="email" placeholder="voce@email.com" required></div>
+        <div class="field field-relative"><label class="field-label">Senha</label><input class="pill-input" id="cad-senha" type="password" placeholder="••••••••" required minlength="4"><span class="eye" onclick="togglePw('cad-senha', this)"><img class="ico" data-icon="olho" alt=""></span></div>
+        <div class="field field-relative"><label class="field-label">Confirme sua senha</label><input class="pill-input" id="cad-confirmar" type="password" placeholder="••••••••" required minlength="4"><span class="eye" onclick="togglePw('cad-confirmar', this)"><img class="ico" data-icon="olho" alt=""></span></div>
+      </div>
+      <div class="cad-submit" style="margin-top:15px;"><button class="btn-primary" id="cad-btn" type="submit">Cadastrar como doador</button></div>
+      <p class="helper-note" style="margin-top:10px;">Já possui uma conta? <a href="#" onclick="showScreen('screen-login'); return false;">Fazer login</a></p>
+    </form>
+  </div>
+
+  <!-- ================= 3. BUSCA / INÍCIO ================= -->
+  <div class="page-frame view-screen" id="screen-busca">
+    <div class="search-nav-container">
+      <form class="search-nav-bar" onsubmit="handleBusca(event)">
+        <div class="search-input-wrap"><img class="ico" data-icon="busca" alt=""><input id="busca-q" placeholder="O que você procura hoje? (Ex: iPhone, Cadeira de Rodas...)" oninput="handleBusca()"></div>
+        <button class="btn-primary" type="submit" style="padding: 10px 20px; border-radius: 20px;">Buscar</button>
+      </form>
+      <div class="search-nav-filters">
+        <span class="chip-filter" onclick="filtrarCategoria('')">Todos</span>
+        <span class="chip-filter" onclick="filtrarCategoria('Eletrônicos')"><img class="ico" data-icon="cat-eletronicos" alt=""> Eletrônicos</span>
+        <span class="chip-filter" onclick="filtrarCategoria('Acessibilidade')"><img class="ico" data-icon="cat-acessibilidade" alt=""> Acessibilidade</span>
+        <span class="chip-filter" onclick="filtrarCategoria('Saúde')"><img class="ico" data-icon="cat-saude" alt=""> Saúde</span>
+      </div>
+    </div>
+
+    <div class="busca-body">
+      <div class="filters">
+        <h3>Filtros de Localização</h3>
+        <form onsubmit="handleBusca(event)">
+          <div class="field"><label class="field-label">Cidade / Região</label><input class="pill-input" id="busca-local" placeholder="Ex: São Paulo" oninput="handleBusca()"></div>
+          <button class="btn-primary" type="submit" style="width:100%; margin-top:8px;">Aplicar Filtro</button>
+        </form>
+      </div>
+      <div class="results">
+        <h3 id="busca-titulo">Itens Disponíveis</h3>
+        <div class="card-grid" id="grid-principais"></div>
+        <h3 style="margin-top: 24px;">Outros itens recomendados</h3>
+        <div class="card-grid" id="grid-similares"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 4. NOTIFICAÇÕES ================= -->
+  <div class="page-frame view-screen" id="screen-notificacoes">
+    <div class="notif-container">
+      <h2 style="font-family:'Fredoka', sans-serif; margin-bottom: 16px; color:#2d3748;">Central de Notificações</h2>
+      <div id="notif-list">
+        <div class="notif-card unread" onclick="showScreen('screen-tracking')">
+          <div class="notif-icon"><img class="ico" data-icon="entrega" alt=""></div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <span class="notif-title">Solicitação Aprovada!</span>
+              <span class="notif-time">Há 5 min</span>
+            </div>
+            <div class="notif-desc">Marina Santos aceitou sua solicitação para o iPhone 7. Clique aqui para agendar a retirada!</div>
+          </div>
+        </div>
+
+        <div class="notif-card unread" onclick="showScreen('screen-chat')">
+          <div class="notif-icon"><img class="ico" data-icon="mensagem" alt=""></div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <span class="notif-title">Nova mensagem de João Pedro</span>
+              <span class="notif-time">Há 1 hora</span>
+            </div>
+            <div class="notif-desc">"Olá! A cadeira de rodas ainda está disponível para busca neste sábado."</div>
+          </div>
+        </div>
+
+        <div class="notif-card" onclick="showScreen('screen-busca')">
+          <div class="notif-icon"><img class="ico" data-icon="presente" alt=""></div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <span class="notif-title">Novos itens na sua região</span>
+              <span class="notif-time">Ontem</span>
+            </div>
+            <div class="notif-desc">Existem 3 novos itens doados cadastrados perto de São Paulo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 5. CHAT ================= -->
+  <div class="page-frame view-screen" id="screen-chat">
+    <div class="chat-layout">
+      <div class="chat-sidebar">
+        <div class="chat-sidebar-header">Conversas</div>
+        <div class="chat-user-item active">
+          <div class="chat-avatar">M</div>
+          <div>
+            <div style="font-weight: 700; font-size: 13px;">Marina Santos</div>
+            <div style="font-size: 11px; color: #718096;">Doador · iPhone 7</div>
+          </div>
+        </div>
+        <div class="chat-user-item">
+          <div class="chat-avatar" style="background:#48bb78;">J</div>
+          <div>
+            <div style="font-weight: 700; font-size: 13px;">João Pedro</div>
+            <div style="font-size: 11px; color: #718096;">Doador · Cadeira de Rodas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-main">
+        <div class="chat-header">
+          <div class="chat-avatar">M</div>
+          <div>
+            <div>Marina Santos</div>
+            <div style="font-size:11px; font-weight:normal; color:#4a5568;">Item: iPhone 7 32GB</div>
+          </div>
+        </div>
+        <div class="chat-messages" id="chat-msgs">
+          <div class="msg-bubble received">Olá! Recebi seu formulário de solicitação.</div>
+          <div class="msg-bubble received">Pode fazer a retirada hoje das 14h às 16h?</div>
+          <div class="msg-bubble sent">Olá Marina! Posso sim, combinadíssimo!</div>
+        </div>
+        <form class="chat-input-area" onsubmit="enviarMensagem(event)">
+          <input id="chat-input-text" placeholder="Digite sua mensagem..." required>
+          <button class="btn-send" type="submit" aria-label="Enviar mensagem" title="Enviar"><img class="ico" data-icon="enviar" alt=""></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 6. DETALHES DO PRODUTO ================= -->
+  <div class="page-frame view-screen" id="screen-produto">
+    <div class="produto-body">
+      <a class="back-row" href="#" onclick="showScreen('screen-busca'); return false;" style="text-decoration:none;"><img class="ico" data-icon="voltar" alt=""> Voltar para busca</a>
+      <div class="produto-main">
+        <div class="produto-photo">
+          <img id="p-img" alt="Foto do Produto" onerror="this.style.display='none'; document.getElementById('p-icon-fallback').style.display='block';">
+          <div id="p-icon-fallback" class="phone-mock" style="display:none;"><div class="screen-mock" id="p-icon"></div></div>
+        </div>
+        <div class="produto-panel">
+          <h2 id="p-nome">Item</h2>
+          <span class="entrega-badge" id="p-entrega"><img class="ico" data-icon="entrega" alt=""> Este doador também entrega</span>
+          <p style="font-size:12.5px; color:var(--forest); font-weight:600; margin:-6px 0 14px;" id="p-doador-row">
+            <img class="ico" data-icon="usuario" alt=""> Doado por <a href="#" onclick="abrirDoador('marina'); return false;" id="p-doador-link">Marina · <img class="ico" data-icon="estrela" alt=""> 4.9 — ver perfil</a>
+          </p>
+          <h4>Informações técnicas</h4>
+          <p style="font-size:13.5px; color:var(--ink); margin:0 0 4px; font-weight:600;">Características:</p>
+          <ul id="p-caracteristicas"></ul>
+          <p style="font-size:13.5px; color:var(--ink); margin:14px 0 4px; font-weight:600;">Especificações:</p>
+          <ul id="p-especificacoes"></ul>
+          <div style="display:flex; gap:10px; margin-top:15px;">
+            <button class="btn-primary" onclick="abrirFormulario()" style="flex:1;">Solicitar Item</button>
+            <button class="btn-primary" onclick="showScreen('screen-chat')" style="background:#cbd5e0; color:#2d3748;"><img class="ico" data-icon="mensagem" alt=""> Chat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 7. FORMULÁRIO DE SOLICITAÇÃO ================= -->
+  <div class="page-frame view-screen" id="screen-form">
+    <div class="form-card-head">
+      <h2>Formulário para recebimento do item</h2>
+      <span class="step" id="form-item-label">iPhone 7 32GB</span>
+    </div>
+    <form onsubmit="handleFormSubmit(event)">
+      <div class="form-grid">
+        <div class="field"><label class="field-label">Qual é a situação profissional atual?</label><input class="pill-input" id="f-profissao" placeholder="Ex: desempregado, autônomo…" required></div>
+        <div class="field"><label class="field-label">Qual seu endereço?</label><input class="pill-input" id="f-endereco" placeholder="Rua, número, bairro" required></div>
+        <div class="field"><label class="field-label">Qual é a renda familiar total aproximada?</label><input class="pill-input" id="f-renda" placeholder="Ex: R$ 1.500" required></div>
+        <div class="field"><label class="field-label">Você mora perto do endereço residencial deste doador?</label><input class="pill-input" id="f-perto" placeholder="Sim / Não — distância aproximada" required></div>
+        <div class="field full">
+          <label class="field-label">Por que você precisa deste item e como ele vai te ajudar?</label>
+          <textarea class="pill-input" id="f-motivo" placeholder="Descreva aqui brevemente seu motivo…" required></textarea>
+        </div>
+        <div class="field full">
+          <label class="field-label">Como você pretende buscar este item?</label>
+          <div class="choice-group">
+            <label class="choice-card"><input type="radio" name="transporte" value="veiculo_proprio" checked> <span>Tenho veículo próprio adequado</span></label>
+            <label class="choice-card"><input type="radio" name="transporte" value="frete_proprio"> <span>Posso organizar frete por minha conta</span></label>
+            <label class="choice-card"><input type="radio" name="transporte" value="precisa_entrega"> <span>Preciso que o doador entregue</span></label>
+          </div>
+        </div>
+        <div class="declare-row">
+          <input type="checkbox" id="declare" required>
+          <p>Declaro que preciso deste item para uso próprio. A revenda é proibida e sujeita ao banimento permanente.</p>
+        </div>
+        <div class="form-submit"><button class="btn-primary" type="submit">Enviar solicitação</button></div>
+      </div>
+    </form>
+  </div>
+
+  <!-- ================= 8. PERFIL DO DOADOR ================= -->
+  <div class="page-frame view-screen" id="screen-doador">
+    <div class="perfil-body">
+      <a class="back-row" href="#" onclick="showScreen('screen-busca'); return false;" style="text-decoration:none;"><img class="ico" data-icon="voltar" alt=""> Voltar</a>
+      <div class="perfil-hero">
+        <div class="perfil-avatar" id="d-avatar">M</div>
+        <div class="perfil-hero-info">
+          <h2 id="d-nome">Marina Santos</h2>
+          <p class="since" id="d-desde">Doador(a) desde Jan/2024 · São Paulo, SP</p>
+          <div class="perfil-badges">
+            <span class="perfil-badge"><img class="ico" data-icon="check" alt=""> Identidade verificada</span>
+            <span class="perfil-badge"><img class="ico" data-icon="check" alt=""> CPF confirmado</span>
+            <span class="perfil-badge"><img class="ico" data-icon="raio" alt=""> Responde rápido</span>
+          </div>
+        </div>
+        <div class="perfil-stars">
+          <div class="num" id="d-nota">4.9</div>
+          <div class="stars" data-stars="5"></div>
+          <div class="count" id="d-avaliacoes">12 avaliações</div>
+        </div>
+      </div>
+      <div class="perfil-grid">
+        <div class="perfil-card">
+          <h4>Resumo</h4>
+          <div class="perfil-stat-row"><span class="label">Itens doados</span><span class="value" id="d-itens-count">8</span></div>
+          <div class="perfil-stat-row"><span class="label">Doações concluídas</span><span class="value">8</span></div>
+          <div class="perfil-stat-row"><span class="label">Tempo médio de resposta</span><span class="value">15 min</span></div>
+          <h4 style="margin-top:20px;">Sobre</h4>
+          <p class="perfil-about" id="d-sobre">Faço doações de eletrônicos e itens sem uso para ajudar a comunidade.</p>
+        </div>
+        <div class="perfil-card">
+          <h4>Avaliações de quem já recebeu</h4>
+          <div class="review">
+            <div class="review-top"><span class="who">Carlos M.</span><span class="stars" data-stars="5"></span></div>
+            <p>Excelente atendimento! O item estava novinho e a entrega foi pontual.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 9. CARRINHO ================= -->
+  <div class="page-frame view-screen" id="screen-carrinho">
+    <div class="carrinho-body" id="carrinho-container">
+      <h2 class="carrinho-title">Seu carrinho</h2>
+      <div id="carrinho-content"></div>
+    </div>
+  </div>
+
+  <!-- ================= 10. AGENDAMENTO (MATCH SEGURO) ================= -->
+  <div class="page-frame view-screen" id="screen-agendamento">
+    <div class="produto-body">
+      <div class="match-seguro-intro">
+        <div class="icon"><img class="ico" data-icon="cadeado" alt=""></div>
+        <div>
+          <h4>Match Seguro</h4>
+          <p>Escolha um dos horários disponibilizados pelo doador. Após confirmar, geramos um código de 4 dígitos para validação presencial.</p>
+        </div>
+      </div>
+      <h2 style="font-family:'Fredoka', sans-serif; font-size:18px; color:var(--forest-deep); margin:0 0 4px;" id="agendar-item-title">Item Selecionado</h2>
+      <p style="font-size:12.5px; color:var(--ink-soft); margin:0 0 20px;">Escolha um horário sugerido:</p>
+      <form onsubmit="handleAgendarSubmit(event)">
+        <label class="slot-card" style="display:flex; gap:10px; margin-bottom:10px; cursor:pointer;">
+          <input type="radio" name="slot" value="0" checked>
+          <div class="slot-info"><div>Hoje</div><div style="font-weight:600;">14:00 às 16:00</div></div>
+        </label>
+        <label class="slot-card" style="display:flex; gap:10px; margin-bottom:10px; cursor:pointer;">
+          <input type="radio" name="slot" value="1">
+          <div class="slot-info"><div>Amanhã</div><div style="font-weight:600;">10:00 às 12:00</div></div>
+        </label>
+        <button class="btn-primary" type="submit" style="margin-top:15px;">Confirmar horário</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= 11. RASTREAMENTO / TRACKING ================= -->
+  <div class="page-frame view-screen" id="screen-tracking">
+    <div class="tracking-layout">
+      <div class="tracking-map" id="tracking-map">
+        <div class="eta-chip">
+          <div class="big" id="eta-big">Hoje</div>
+          <div class="small" id="eta-small">retirada agendada para 14:00 às 16:00</div>
+        </div>
+        <svg viewBox="0 0 600 500" preserveAspectRatio="none">
+          <path d="M 120 380 C 220 340, 260 260, 320 220 S 430 140, 470 100" fill="none" stroke="#75C550" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round"/>
+        </svg>
+        <div class="map-pin you" style="left:120px; top:380px;">
+          <div class="dot"></div>
+          <div class="lbl">Você</div>
+        </div>
+        <div class="map-pin donor" id="map-donor-label" style="left:470px; top:100px;">
+          <div class="dot"></div>
+          <div class="lbl" id="track-map-donor-name">Marina (doador(a))</div>
+        </div>
+        <div class="courier-marker" style="left:280px; top:250px;"><img class="ico" data-icon="pessoa" alt=""></div>
+      </div>
+
+      <div class="tracking-panel" id="tracking-panel"></div>
+    </div>
+  </div>
+
+  <!-- ================= 12. CONFIRMAR ENTREGA / VALIDAR PIN ================= -->
+  <div class="page-frame view-screen" id="screen-confirmar-entrega">
+    <div class="produto-body">
+      <div class="match-seguro-intro">
+        <div class="icon"><img class="ico" data-icon="chave" alt=""></div>
+        <div>
+          <h4>Confirmação de Entrega · Match Seguro</h4>
+          <p>Validação presencial do código de retirada.</p>
+        </div>
+      </div>
+      <div style="text-align:center; padding: 20px 0;">
+        <p style="font-size:14px; color:var(--ink-soft);">Seu código de confirmação:</p>
+        <div style="font-size: 42px; font-weight: 700; letter-spacing: 8px; color: var(--forest-deep); margin: 10px 0;" id="display-pin">8 4 9 2</div>
+        <p style="font-size:12px; color:var(--ink-soft);">Status: <strong style="color:var(--forest);" id="status-text">Aguardando confirmação presencial</strong></p>
+      </div>
+
+      <hr style="margin:20px 0; border:none; border-top:1px solid #e2e8f0;">
+
+      <div style="background:#f7fafc; padding:15px; border-radius:8px; text-align:center;">
+        <p style="font-size:12px; font-weight:600; color:#4a5568; margin-bottom:8px;">[Área do Doador] Digite o PIN recebido para finalizar:</p>
+        <form onsubmit="handleConfirmarPin(event)">
+          <input class="pill-input" id="input-pin" placeholder="0000" maxlength="4" style="width:100px; text-align:center; font-size:18px;" required>
+          <button class="btn-primary" type="submit" style="margin-left:8px; padding:8px 16px;">Validar PIN</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 13. MEU PERFIL ================= -->
+  <div class="page-frame view-screen" id="screen-perfil">
+    <div class="perfil-body" id="meu-perfil-container"></div>
+  </div>
+
+</div>
+
+<script>
+/* =====================================================================
+   CENTRAL DE ÍCONES E IMAGENS DO REPASSA
+   ---------------------------------------------------------------------
+   Para trocar qualquer ícone do site, basta alterar o CAMINHO abaixo.
+   Não precisa mexer no HTML, no CSS ou no resto do JS.
+
+   Dica: se o arquivo não for encontrado, o ícone aparece como um
+   quadradinho tracejado cinza no lugar, assim você vê onde falta imagem.
+   Formatos aceitos: .png, .svg, .webp, .jpg
+   ===================================================================== */
+
+const ICONS = {
+
+  /* ---------- Marca ---------- */
+  'logo':               'assets/logo.png',
+
+  /* ---------- Menu superior ---------- */
+  'busca':              'assets/icons/busca.png',          // lupa (menu + campo de busca)
+  'avisos':             'assets/icons/avisos.png',         // sino
+  'mensagens':          'assets/icons/mensagens.png',      // balão de conversa (menu)
+  'carrinho':           'assets/icons/carrinho.png',       // carrinho
+  'rastreamento':       'assets/icons/rastreamento.png',   // pino de localização
+  'perfil':             'assets/icons/perfil.png',         // pessoa (menu)
+  'sair':               'assets/icons/sair.png',           // porta
+
+  /* ---------- Senha ---------- */
+  'olho':               'assets/icons/olho.png',           // mostrar senha
+  'olho-fechado':       'assets/icons/olho-fechado.png',   // ocultar senha
+
+  /* ---------- Categorias (filtros e itens sem foto) ---------- */
+  'cat-eletronicos':    'assets/icons/cat-eletronicos.png',
+  'cat-acessibilidade': 'assets/icons/cat-acessibilidade.png',
+  'cat-saude':          'assets/icons/cat-saude.png',
+
+  /* ---------- Notificações / produto / chat ---------- */
+  'entrega':            'assets/icons/entrega.png',        // caminhão
+  'mensagem':           'assets/icons/mensagem.png',       // balão (avisos, botão Chat, rastreamento)
+  'presente':           'assets/icons/presente.png',       // presente / conta doador
+  'enviar':             'assets/icons/enviar.png',         // botão enviar do chat (use branco)
+  'usuario':            'assets/icons/usuario.png',        // "Doado por"
+  'telefone':           'assets/icons/telefone.png',       // ligar
+
+  /* ---------- Setas ---------- */
+  'voltar':             'assets/icons/voltar.png',         // seta para a esquerda
+  'seta-direita':       'assets/icons/seta-direita.png',   // seta para a direita
+
+  /* ---------- Avaliações e selos ---------- */
+  'estrela':            'assets/icons/estrela.png',
+  'check':              'assets/icons/check.png',          // verificado / etapa concluída
+  'raio':               'assets/icons/raio.png',           // "responde rápido"
+  'ponto':              'assets/icons/ponto.png',          // etapa atual do rastreamento
+
+  /* ---------- Match Seguro / retirada ---------- */
+  'cadeado':            'assets/icons/cadeado.png',
+  'chave':              'assets/icons/chave.png',
+  'pessoa':             'assets/icons/pessoa.png',         // marcador no mapa
+  'calendario':         'assets/icons/calendario.png',
+  'sos':                'assets/icons/sos.png',            // botão de emergência
+  'aperto-de-mao':      'assets/icons/aperto-de-mao.png'   // conta donatário
+};
+
+/* ---------- Fotos dos produtos ---------- */
+const IMAGENS = {
+  'iphone':             'assets/imagem.jpg'
+};
+
+/* =====================================================================
+   FUNÇÕES AUXILIARES (não precisa editar daqui para baixo)
+   ===================================================================== */
+
+// Gera a tag <img> de um ícone (usada nos templates do JS)
+function ico(nome, classe) {
+  const src = ICONS[nome] || '';
+  return `<img class="ico ico-${nome}${classe ? ' ' + classe : ''}" data-icon="${nome}" src="${src}" alt="" onerror="this.classList.add('ico-missing')">`;
+}
+
+// Gera N estrelas
+function estrelas(n) {
+  return ico('estrela').repeat(Math.max(0, Math.round(n)));
+}
+
+// Preenche os <img data-icon="..."> e [data-stars="..."] que estão no HTML
+function aplicarIcones(raiz) {
+  raiz = raiz || document;
+  raiz.querySelectorAll('img[data-icon]').forEach(img => {
+    const src = ICONS[img.dataset.icon] || '';
+    img.classList.remove('ico-missing');
+    if (!img.hasAttribute('onerror')) {
+      img.onerror = () => img.classList.add('ico-missing');
+    }
+    if (!src) img.classList.add('ico-missing');
+    img.src = src;
+  });
+  raiz.querySelectorAll('[data-stars]').forEach(el => {
+    el.innerHTML = estrelas(Number(el.dataset.stars));
+  });
+}
+</script>
+
+<script>
+// Base de dados local em memória
+const mockDb = {
+  usuario: {
+    nome: "Usuário Demonstração",
+    email: "ingrid.lacerd@gmail.com",
+    tipo: "donatario",
+    cpf: "123.456.789-00",
+    telefone: "(11) 98765-4321",
+    pontuacao: 150
+  },
+  items: [
+    { id: 'i1', nome: 'iPhone 7 32GB', tag: 'Eletrônicos', loc: 'São Paulo, SP', icone: 'cat-eletronicos', imagem: IMAGENS.iphone, entrega: true, doador: { id: 'marina', nome: 'Marina Santos', nota: 4.9, avatar: 'M' }, car: ['Bateria 85%', 'Desbloqueado', 'Acompanha cabo'], esp: ['Tela 4.7 polegadas', '32GB Armazenamento'] },
+    { id: 'i2', nome: 'iPhone 7 Plus 128GB', tag: 'Eletrônicos', loc: 'Campinas, SP', icone: 'cat-eletronicos', imagem: IMAGENS.iphone, entrega: false, doador: { id: 'marina', nome: 'Marina Santos', nota: 4.9, avatar: 'M' }, car: ['Câmera Dupla', 'Sem arranhões'], esp: ['128GB Armazenamento'] },
+    { id: 'i3', nome: 'Cadeira de Rodas Dobrável', tag: 'Acessibilidade', loc: 'São Paulo, SP', icone: 'cat-acessibilidade', imagem: '', entrega: true, doador: { id: 'joao', nome: 'João Pedro', nota: 5.0, avatar: 'J' }, car: ['Aço dobrável', 'Suporta até 100kg'], esp: ['Freios bilaterais'] },
+    { id: 'i4', nome: 'Muleta de Alumínio', tag: 'Saúde', loc: 'Osasco, SP', icone: 'cat-saude', imagem: '', entrega: false, doador: { id: 'joao', nome: 'João Pedro', nota: 5.0, avatar: 'J' }, car: ['Regulagem de altura', 'Par conservado'], esp: ['Borracha antiderrapante'] }
+  ],
+  pedidos: []
+};
+
+let itemSelecionado = mockDb.items[0];
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function togglePw(id, el){
+  const input = document.getElementById(id);
+  const isPw = input.type === 'password';
+  input.type = isPw ? 'text' : 'password';
+  const img = el.querySelector('img');
+  img.dataset.icon = isPw ? 'olho-fechado' : 'olho';
+  aplicarIcones(el);
+}
+
+function setRole(role){
+  document.getElementById('rt-doador').classList.toggle('active', role==='doador');
+  document.getElementById('rt-donatario').classList.toggle('active', role==='donatario');
+  document.getElementById('cad-btn').textContent = role==='doador' ? 'Cadastrar como doador' : 'Cadastrar como donatário';
+  mockDb.usuario.tipo = role;
+}
+
+function setCadastroRole(role) {
+  setRole(role);
+  showScreen('screen-cadastro');
+}
+
+// Navegação entre telas SPA
+function showScreen(screenId) {
+  document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) target.classList.add('active');
+
+  const mainNav = document.getElementById('main-nav');
+  if (screenId === 'screen-login' || screenId === 'screen-cadastro') {
+    mainNav.classList.add('hidden');
+  } else {
+    mainNav.classList.remove('hidden');
+  }
+
+  document.querySelectorAll('.demo-nav button').forEach(b => b.classList.remove('active'));
+  if (screenId === 'screen-busca') document.getElementById('btn-nav-busca')?.classList.add('active');
+  if (screenId === 'screen-notificacoes') {
+    document.getElementById('btn-nav-notif')?.classList.add('active');
+    document.getElementById('notif-badge').style.display = 'none';
+  }
+  if (screenId === 'screen-chat') document.getElementById('btn-nav-chat')?.classList.add('active');
+  if (screenId === 'screen-carrinho') {
+    document.getElementById('btn-nav-carrinho')?.classList.add('active');
+    renderCarrinho();
+  }
+  if (screenId === 'screen-tracking') {
+    document.getElementById('btn-nav-tracking')?.classList.add('active');
+    renderTracking();
+  }
+  if (screenId === 'screen-perfil') {
+    document.getElementById('btn-nav-perfil')?.classList.add('active');
+    renderMeuPerfil();
+  }
+}
+
+// Envio de mensagem no chat
+function enviarMensagem(e) {
+  e.preventDefault();
+  const input = document.getElementById('chat-input-text');
+  const txt = input.value.trim();
+  if (!txt) return;
+
+  const msgs = document.getElementById('chat-msgs');
+  msgs.innerHTML += `<div class="msg-bubble sent">${escapeHtml(txt)}</div>`;
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Renderizar busca e filtros
+function handleBusca(e) {
+  if (e) e.preventDefault();
+  const q = document.getElementById('busca-q').value.toLowerCase().trim();
+  const loc = document.getElementById('busca-local').value.toLowerCase().trim();
+
+  let list = mockDb.items.filter(it => {
+    const mQ = !q || it.nome.toLowerCase().includes(q) || it.tag.toLowerCase().includes(q);
+    const mLoc = !loc || it.loc.toLowerCase().includes(loc);
+    return mQ && mLoc;
+  });
+
+  renderCards(list, 'grid-principais');
+  renderCards(mockDb.items.slice(2), 'grid-similares');
+}
+
+function filtrarCategoria(cat) {
+  document.getElementById('busca-q').value = cat;
+  handleBusca();
+}
+
+function renderCards(list, containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!list.length) { el.innerHTML = '<p style="font-size:12px; color:#718096;">Nenhum item encontrado.</p>'; return; }
+  el.innerHTML = list.map(it => `
+    <div class="item-card" onclick="verProduto('${it.id}')" style="cursor:pointer;">
+      <div class="item-thumb">${it.imagem ? `<img src="${it.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">` : ico(it.icone)}</div>
+      <div class="item-info">
+        <span class="tag">${escapeHtml(it.tag)}</span>
+        <p class="name">${escapeHtml(it.nome)}</p>
+        <p class="loc">${escapeHtml(it.loc)}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Abrir detalhes do produto
+function verProduto(id) {
+  itemSelecionado = mockDb.items.find(i => i.id === id) || mockDb.items[0];
+  document.getElementById('p-nome').textContent = itemSelecionado.nome;
+  
+  const imgEl = document.getElementById('p-img');
+  const fallbackEl = document.getElementById('p-icon-fallback');
+
+  if (itemSelecionado.imagem) {
+    imgEl.src = itemSelecionado.imagem;
+    imgEl.style.display = 'block';
+    fallbackEl.style.display = 'none';
+  } else {
+    imgEl.style.display = 'none';
+    fallbackEl.style.display = 'block';
+    document.getElementById('p-icon').innerHTML = ico(itemSelecionado.icone);
+  }
+
+  document.getElementById('p-entrega').style.display = itemSelecionado.entrega ? 'inline-block' : 'none';
+  
+  document.getElementById('p-caracteristicas').innerHTML = itemSelecionado.car.map(c => `<li>${escapeHtml(c)}</li>`).join('');
+  document.getElementById('p-especificacoes').innerHTML = itemSelecionado.esp.map(e => `<li>${escapeHtml(e)}</li>`).join('');
+  
+  showScreen('screen-produto');
+}
+
+function abrirFormulario() {
+  document.getElementById('form-item-label').textContent = itemSelecionado.nome;
+  showScreen('screen-form');
+}
+
+function abrirDoador(id) {
+  showScreen('screen-doador');
+}
+
+function handleFormSubmit(e) {
+  e.preventDefault();
+  const novoPedido = {
+    id: 'req_' + Date.now(),
+    item: itemSelecionado,
+    status: 'agendado',
+    slot: { data: 'Hoje', horario: '14:00 às 16:00' },
+    code: '8492'
+  };
+  mockDb.pedidos.push(novoPedido);
+  document.getElementById('agendar-item-title').textContent = itemSelecionado.nome;
+  showScreen('screen-agendamento');
+}
+
+function handleAgendarSubmit(e) {
+  e.preventDefault();
+  if (mockDb.pedidos.length) {
+    mockDb.pedidos[mockDb.pedidos.length - 1].status = 'agendado';
+  }
+  showScreen('screen-tracking');
+}
+
+function handleConfirmarPin(e) {
+  e.preventDefault();
+  const pinInput = document.getElementById('input-pin').value.trim();
+  if (pinInput === '8492') {
+    alert('PIN validado com sucesso! Retirada concluída.');
+    if (mockDb.pedidos.length) {
+      mockDb.pedidos[mockDb.pedidos.length - 1].status = 'concluido';
+    }
+    document.getElementById('status-text').textContent = 'Retirada concluída com sucesso!';
+  } else {
+    alert('PIN incorreto. Digite 8492 para testar a validação.');
+  }
+}
+
+function acionarSOS() {
+  const confirmSOS = confirm("ALERTA DE EMERGÊNCIA (SOS)\n\nDeseja notificar a central de segurança e partilhar a sua localização atual em tempo real?");
+  if (confirmSOS) {
+    alert("Sinal de emergência enviado com sucesso!\nA equipa de suporte e os contactos de emergência foram notificados.");
+  }
+}
+
+function renderCarrinho() {
+  const container = document.getElementById('carrinho-content');
+  if (!mockDb.pedidos.length) {
+    container.innerHTML = `
+      <p style="font-size:13.5px; color:var(--ink-soft);">Você ainda não tem nenhuma solicitação. <a href="#" onclick="showScreen('screen-busca'); return false;" style="color:var(--forest); font-weight:600;">Buscar itens ${ico('seta-direita')}</a></p>
+    `;
+    return;
+  }
+
+  container.innerHTML = mockDb.pedidos.map(p => `
+    <div class="carrinho-item">
+      <div class="carrinho-thumb">${p.item.imagem ? `<img src="${p.item.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">` : ico(p.item.icone)}</div>
+      <div class="carrinho-info">
+        <p class="name">${escapeHtml(p.item.nome)}</p>
+        <p class="meta">${escapeHtml(p.item.tag)} · Retirada em ${escapeHtml(p.item.loc)}</p>
+        <span class="carrinho-status"><span class="dot"></span> Status: ${p.status}</span>
+        <button class="btn-primary" style="margin-top:10px;" onclick="showScreen('screen-tracking')">Ver Rastreamento / PIN</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTracking() {
+  const panel = document.getElementById('tracking-panel');
+  const pedido = mockDb.pedidos[mockDb.pedidos.length - 1] || {
+    id: 'req_demo',
+    item: mockDb.items[0],
+    status: 'agendado',
+    slot: { data: 'Hoje', horario: '14:00 às 16:00' },
+    code: '8492'
+  };
+
+  const item = pedido.item;
+  const donor = item.doador;
+  const finished = pedido.status === 'concluido';
+
+  document.getElementById('eta-big').textContent = finished ? 'Concluído' : pedido.slot.data;
+  document.getElementById('eta-small').textContent = finished ? 'retirada finalizada' : `retirada agendada para ${pedido.slot.horario}`;
+  document.getElementById('track-map-donor-name').textContent = donor.nome.split(' ')[0] + ' (doador(a))';
+
+  panel.innerHTML = `
+    <h3>${finished ? 'Retirada concluída' : 'Retirada agendada — Match Seguro'}</h3>
+    <p class="sub">${escapeHtml(item.nome)} · com ${escapeHtml(donor.nome)}</p>
+    ${!finished ? `<p style="font-size:12.5px; color:var(--ink-soft); margin:-10px 0 14px;">${ico('calendario')} ${escapeHtml(pedido.slot.data)} ·${escapeHtml(pedido.slot.horario)}</p>` : ''}
+
+    <div class="safety-code">
+      <div class="label">${finished ? 'Código de retirada (usado)' : 'Código de retirada'}</div>
+      <div class="code">${pedido.code.split('').join(' ')}</div>
+      <div class="hint">${finished ? 'Esse código já foi conferido e a entrega foi confirmada.' : `Mostre este código a ${escapeHtml(donor.nome.split(' ')[0])} na hora da retirada — é ele(a) quem digita o código no app pra confirmar que recebeu o item.`}</div>
+    </div>
+
+    <ul class="track-steps">
+      <li class="done"><span class="bullet">${ico('check')}</span><div class="txt"><div class="t1">Solicitação aprovada</div><div class="t2">${escapeHtml(donor.nome.split(' ')[0])} propôs horários de retirada</div></div></li>
+      <li class="done"><span class="bullet">${ico('check')}</span><div class="txt"><div class="t1">Horário agendado</div><div class="t2">${escapeHtml(pedido.slot.data)} · ${escapeHtml(pedido.slot.horario)}</div></div></li>
+      <li class="${finished ? 'done' : 'active'}"><span class="bullet">${finished ? ico('check') : ico('ponto')}</span><div class="txt"><div class="t1">Retirada confirmada com código</div><div class="t2">${escapeHtml(donor.nome.split(' ')[0])} digita o código pra fechar o pedido</div></div></li>
+      <li class="${finished ? 'done' : 'pending'}"><span class="bullet">${finished ? ico('check') : '4'}</span><div class="txt"><div class="t1">Avaliação</div><div class="t2">Avalie como foi a experiência</div></div></li>
+    </ul>
+
+    <div class="tracking-donor-card">
+      <div class="mini-avatar">${escapeHtml(donor.avatar || 'M')}</div>
+      <div class="info">
+        <div class="name">${escapeHtml(donor.nome)}</div>
+        <div class="plate">${ico('estrela')} ${donor.nota} · Identidade verificada</div>
+      </div>
+      <button class="action" type="button" title="Chamar" onclick="alert('Ligação simulada nesta versão.')">${ico('telefone')}</button>
+      <button class="action" type="button" title="Mensagem" onclick="showScreen('screen-chat')">${ico('mensagem')}</button>
+    </div>
+
+    <div class="tracking-actions" style="margin-top:15px; display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn-primary btn-ghost" type="button" style="flex:1;" onclick="alert('Link de acompanhamento copiado (simulado).')">Compartilhar trajeto</button>
+      ${finished
+        ? `<button class="btn-primary" style="flex:1;" onclick="showScreen('screen-carrinho')">Voltar ao carrinho</button>`
+        : `<button class="btn-primary" style="flex:1;" onclick="showScreen('screen-confirmar-entrega')">${ico('chave')} Sou ${escapeHtml(donor.nome.split(' ')[0])}, confirmar entrega</button>`}
+      <button class="btn-sos" type="button" style="width:100%; margin-top:4px;" onclick="acionarSOS()">${ico('sos')} Botão SOS / Emergência</button>
+    </div>
+  `;
+}
+
+function renderMeuPerfil() {
+  const u = mockDb.usuario;
+  const container = document.getElementById('meu-perfil-container');
+  container.innerHTML = `
+    <div class="perfil-hero">
+      <div class="perfil-avatar">UD</div>
+      <div class="perfil-hero-info">
+        <h2>${escapeHtml(u.nome)}</h2>
+        <p class="since">${u.tipo === 'doador' ? ico('presente') + ' Conta Doador' : ico('aperto-de-mao') + ' Conta Donatário'}</p>
+        <div class="perfil-badges">
+          <span class="perfil-badge">${ico('check')} Email verificado</span>
+          <span class="perfil-badge">${ico('estrela')} ${u.pontuacao} pontos de reputação</span>
+        </div>
+      </div>
+    </div>
+    <div class="perfil-grid">
+      <div class="perfil-card">
+        <h4>Meus Dados</h4>
+        <div class="perfil-stat-row"><span class="label">Email</span><span class="value">${escapeHtml(u.email)}</span></div>
+        <div class="perfil-stat-row"><span class="label">Telefone</span><span class="value">${escapeHtml(u.telefone)}</span></div>
+        <div class="perfil-stat-row"><span class="label">CPF</span><span class="value">${escapeHtml(u.cpf)}</span></div>
+      </div>
+    </div>
+  `;
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  mockDb.usuario.email = document.getElementById('login-email').value;
+  showScreen('screen-busca');
+}
+
+function handleCadastro(e) {
+  e.preventDefault();
+  mockDb.usuario.nome = document.getElementById('cad-nome').value || "Usuário Cadastrado";
+  mockDb.usuario.email = document.getElementById('cad-email').value;
+  alert('Cadastro efetuado com sucesso!');
+  showScreen('screen-busca');
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+  aplicarIcones();
+  handleBusca();
+  showScreen('screen-login');
+});
+</script>
+
+</body>
+</html>
