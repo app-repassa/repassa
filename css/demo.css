@@ -1128,3 +1128,10 @@
 
 .chat-input-area .btn-send .ico{width:22px; height:22px; vertical-align:middle;}
 .chat-input-area .btn-send .ico-missing{outline-color:rgba(255,255,255,.75); background:transparent;}
+
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 20px;
+    background: var(--forest);
+    color: white;}
