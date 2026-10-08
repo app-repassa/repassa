@@ -2,37 +2,48 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Repassa · Sistema Unificado</title>
   <link rel="icon" href="assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/responsivo.css">
 
 </head>
 <body>
 
-<!-- Navegação Fixa Superior (Oculta no Login e Cadastro) -->
 <nav class="demo-nav hidden" id="main-nav">
   <div class="logo-area" onclick="showScreen('screen-busca')">
     <img data-icon="logo" src="assets/logo.png" alt="Repassa" style="width:24px;height:24px;object-fit:contain;" onerror="this.style.display='none'">
     <span>Repassa</span>
   </div>
-  <div class="nav-links">
+  <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <button id="btn-nav-busca" onclick="showScreen('screen-busca')"><img class="ico" data-icon="busca" alt=""> Buscar</button>
+    <button id="btn-nav-doar" class="nav-doar" type="button" onclick="abrirDoar()"><img class="ico" data-icon="presente" alt=""> Doar item</button>
     <button id="btn-nav-notif" onclick="showScreen('screen-notificacoes')"><img class="ico" data-icon="avisos" alt=""> Avisos <span class="nav-badge" id="notif-badge">2</span></button>
     <button id="btn-nav-chat" onclick="showScreen('screen-chat')"><img class="ico" data-icon="mensagens" alt=""> Mensagens</button>
     <button id="btn-nav-carrinho" onclick="showScreen('screen-carrinho')"><img class="ico" data-icon="carrinho" alt=""> Carrinho</button>
     <button id="btn-nav-tracking" onclick="showScreen('screen-tracking')"><img class="ico" data-icon="rastreamento" alt=""> Rastreamento</button>
     <button id="btn-nav-perfil" onclick="showScreen('screen-perfil')"><img class="ico" data-icon="perfil" alt=""> Perfil</button>
+    <button id="btn-nav-sorteio" class="nav-sorteio" type="button" onclick="abrirSorteio()"><img class="ico" data-icon="sorteio" alt=""> Sorteio</button>
     <button id="btn-nav-login" onclick="showScreen('screen-login')"><img class="ico" data-icon="sair" alt=""> Sair</button>
+
+    <div class="sorteio-menu">
+      <h4><img class="ico" data-icon="sorteio" alt=""> Concorra a uma caixinha de som!</h4>
+      <p>Participe do sorteio da feira de projetos. Toque no botão ou escaneie o QR Code com outro celular.</p>
+      <div class="sorteio-qr"><img data-img="qrcode" alt="QR Code do formulário do sorteio"></div>
+      <a class="sorteio-cta" data-sorteio-link href="#" target="_blank" rel="noopener">Participar do sorteio</a>
+    </div>
   </div>
 </nav>
 
 <div class="page-shell">
 
-  <!-- ================= 1. LOGIN ================= -->
   <div class="page-frame view-screen active" id="screen-login">
     <div class="login-visual">
       <div class="ring r1"></div>
@@ -58,26 +69,20 @@
           <button class="btn-primary-login" type="submit" style="margin-top:12px;">Entrar</button>
         </form>
         <div class="signup-note">
-          <strong>Não tem uma conta? Faça seu cadastro como:</strong>
-          <div class="role-pick" style="margin-top:8px; display:flex; gap:8px;">
-            <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="setCadastroRole('doador')">Doador</button>
-            <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="setCadastroRole('donatario')">Donatário</button>
-          </div>
+          <strong>Ainda não tem uma conta?</strong>
+          <p class="signup-sub">Com uma conta só você pode doar itens e também receber doações.</p>
+          <button class="btn-primary btn-ghost" type="button" style="width:100%;" onclick="showScreen('screen-cadastro')">Criar conta</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= 2. CADASTRO ================= -->
   <div class="page-frame view-screen" id="screen-cadastro">
     <div class="cadastro-head">
       <div class="brand-mini">
         <span>Repassa</span>
       </div>
-      <div class="role-toggle">
-        <button type="button" class="active" id="rt-doador" onclick="setRole('doador')">Doador</button>
-        <button type="button" id="rt-donatario" onclick="setRole('donatario')">Donatário</button>
-      </div>
+      <p class="cad-sub">Uma conta só para doar e para receber itens.</p>
     </div>
 
     <form onsubmit="handleCadastro(event)">
@@ -90,12 +95,11 @@
         <div class="field field-relative"><label class="field-label">Senha</label><input class="pill-input" id="cad-senha" type="password" placeholder="••••••••" required minlength="4"><span class="eye" onclick="togglePw('cad-senha', this)"><img class="ico" data-icon="olho" alt=""></span></div>
         <div class="field field-relative"><label class="field-label">Confirme sua senha</label><input class="pill-input" id="cad-confirmar" type="password" placeholder="••••••••" required minlength="4"><span class="eye" onclick="togglePw('cad-confirmar', this)"><img class="ico" data-icon="olho" alt=""></span></div>
       </div>
-      <div class="cad-submit" style="margin-top:15px;"><button class="btn-primary" id="cad-btn" type="submit">Cadastrar como doador</button></div>
+      <div class="cad-submit" style="margin-top:15px;"><button class="btn-primary" id="cad-btn" type="submit">Criar conta</button></div>
       <p class="helper-note" style="margin-top:10px;">Já possui uma conta? <a href="#" onclick="showScreen('screen-login'); return false;">Fazer login</a></p>
     </form>
   </div>
 
-  <!-- ================= 3. BUSCA / INÍCIO ================= -->
   <div class="page-frame view-screen" id="screen-busca">
     <div class="search-nav-container">
       <form class="search-nav-bar" onsubmit="handleBusca(event)">
@@ -127,7 +131,6 @@
     </div>
   </div>
 
-  <!-- ================= 4. NOTIFICAÇÕES ================= -->
   <div class="page-frame view-screen" id="screen-notificacoes">
     <div class="notif-container">
       <h2 style="font-family:'Fredoka', sans-serif; margin-bottom: 16px; color:#2d3748;">Central de Notificações</h2>
@@ -167,8 +170,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ================= 5. CHAT ================= -->
   <div class="page-frame view-screen" id="screen-chat">
     <div class="chat-layout">
       <div class="chat-sidebar">
@@ -209,8 +210,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ================= 6. DETALHES DO PRODUTO ================= -->
   <div class="page-frame view-screen" id="screen-produto">
     <div class="produto-body">
       <a class="back-row" href="#" onclick="showScreen('screen-busca'); return false;" style="text-decoration:none;"><img class="ico" data-icon="voltar" alt=""> Voltar para busca</a>
@@ -230,16 +229,18 @@
           <ul id="p-caracteristicas"></ul>
           <p style="font-size:13.5px; color:var(--ink); margin:14px 0 4px; font-weight:600;">Especificações:</p>
           <ul id="p-especificacoes"></ul>
-          <div style="display:flex; gap:10px; margin-top:15px;">
-            <button class="btn-primary" onclick="abrirFormulario()" style="flex:1;">Solicitar Item</button>
-            <button class="btn-primary" onclick="showScreen('screen-chat')" style="background:#cbd5e0; color:#2d3748;"><img class="ico" data-icon="mensagem" alt=""> Chat</button>
+          <div id="p-acoes" style="display:flex; gap:10px; margin-top:15px;">
+            <button class="btn-primary" id="p-btn-solicitar" onclick="abrirFormulario()" style="flex:1;">Solicitar Item</button>
+            <button class="btn-primary" id="p-btn-chat" onclick="showScreen('screen-chat')" style="background:#cbd5e0; color:#2d3748;"><img class="ico" data-icon="mensagem" alt=""> Chat</button>
+          </div>
+          <div id="p-meu-acoes" class="meu-aviso" style="display:none;">
+            <p>Este é um item que <strong>você está doando</strong>. Ele aparece na busca para outras pessoas.</p>
+            <button class="btn-primary btn-ghost btn-remover" type="button" onclick="removerDoacao(itemSelecionado.id)">Remover doação</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- ================= 7. FORMULÁRIO DE SOLICITAÇÃO ================= -->
   <div class="page-frame view-screen" id="screen-form">
     <div class="form-card-head">
       <h2>Formulário para recebimento do item</h2>
@@ -271,8 +272,6 @@
       </div>
     </form>
   </div>
-
-  <!-- ================= 8. PERFIL DO DOADOR ================= -->
   <div class="page-frame view-screen" id="screen-doador">
     <div class="perfil-body">
       <a class="back-row" href="#" onclick="showScreen('screen-busca'); return false;" style="text-decoration:none;"><img class="ico" data-icon="voltar" alt=""> Voltar</a>
@@ -313,7 +312,6 @@
     </div>
   </div>
 
-  <!-- ================= 9. CARRINHO ================= -->
   <div class="page-frame view-screen" id="screen-carrinho">
     <div class="carrinho-body" id="carrinho-container">
       <h2 class="carrinho-title">Seu carrinho</h2>
@@ -321,7 +319,6 @@
     </div>
   </div>
 
-  <!-- ================= 10. AGENDAMENTO (MATCH SEGURO) ================= -->
   <div class="page-frame view-screen" id="screen-agendamento">
     <div class="produto-body">
       <div class="match-seguro-intro">
@@ -346,8 +343,6 @@
       </form>
     </div>
   </div>
-
-  <!-- ================= 11. RASTREAMENTO / TRACKING ================= -->
   <div class="page-frame view-screen" id="screen-tracking">
     <div class="tracking-layout">
       <div class="tracking-map" id="tracking-map">
@@ -373,7 +368,6 @@
     </div>
   </div>
 
-  <!-- ================= 12. CONFIRMAR ENTREGA / VALIDAR PIN ================= -->
   <div class="page-frame view-screen" id="screen-confirmar-entrega">
     <div class="produto-body">
       <div class="match-seguro-intro">
@@ -401,96 +395,132 @@
     </div>
   </div>
 
-  <!-- ================= 13. MEU PERFIL ================= -->
+ 
   <div class="page-frame view-screen" id="screen-perfil">
     <div class="perfil-body" id="meu-perfil-container"></div>
   </div>
 
+  <div class="page-frame view-screen" id="screen-doar">
+    <div class="form-card-head">
+      <h2>Doar um item</h2>
+      <span class="step">Sua doação aparece na busca para quem precisa</span>
+    </div>
+    <form onsubmit="handleDoarSubmit(event)">
+      <div class="form-grid">
+        <div class="field full"><label class="field-label" for="doar-nome">Qual item você quer doar?</label><input class="pill-input" id="doar-nome" placeholder="Ex: Cadeira de rodas dobrável" maxlength="60" required></div>
+        <div class="field">
+          <label class="field-label" for="doar-tag">Categoria</label>
+          <select class="pill-input" id="doar-tag" required>
+            <option value="">Selecione…</option>
+            <option value="Eletrônicos">Eletrônicos</option>
+            <option value="Acessibilidade">Acessibilidade</option>
+            <option value="Saúde">Saúde</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="doar-estado">Estado de conservação</label>
+          <select class="pill-input" id="doar-estado" required>
+            <option value="Novo">Novo</option>
+            <option value="Ótimo" selected>Ótimo</option>
+            <option value="Bom">Bom</option>
+            <option value="Precisa de reparo">Precisa de reparo</option>
+          </select>
+        </div>
+        <div class="field full"><label class="field-label" for="doar-loc">Cidade / região de retirada</label><input class="pill-input" id="doar-loc" placeholder="Ex: São Paulo, SP" required></div>
+        <div class="field full">
+          <label class="field-label" for="doar-desc">Descrição</label>
+          <textarea class="pill-input" id="doar-desc" placeholder="Marca, modelo, tempo de uso, acessórios que acompanham, defeitos…" required></textarea>
+        </div>
+        <div class="field full">
+          <label class="field-label" for="doar-foto">Foto do item (opcional)</label>
+          <label class="upload-box" for="doar-foto" id="doar-upload">
+            <input type="file" id="doar-foto" accept="image/*" onchange="previewFotoDoacao(this)">
+            <img id="doar-preview" alt="Prévia da foto" hidden>
+            <span id="doar-upload-txt">+ Toque aqui para adicionar uma foto</span>
+          </label>
+        </div>
+        <div class="field full">
+          <div class="choice-group">
+            <label class="choice-card"><input type="checkbox" id="doar-entrega"> <span>Posso entregar o item para quem receber</span></label>
+          </div>
+        </div>
+        <div class="declare-row">
+          <input type="checkbox" id="doar-declare" required>
+          <p>Declaro que sou o(a) dono(a) deste item, que ele está nas condições descritas e que a doação é gratuita. A venda é proibida.</p>
+        </div>
+        <div class="form-submit"><button class="btn-primary" type="submit">Publicar doação</button></div>
+      </div>
+    </form>
+  </div>
+
+</div>
+<div class="sorteio-modal" id="sorteio-modal" role="dialog" aria-modal="true" aria-labelledby="sorteio-titulo" onclick="if(event.target===this) fecharSorteio()">
+  <div class="sorteio-card">
+    <button class="sorteio-close" type="button" aria-label="Fechar" onclick="fecharSorteio()">&times;</button>
+    <h3 id="sorteio-titulo"><img class="ico" data-icon="sorteio" alt=""> Concorra a uma caixinha de som!</h3>
+    <p>Escaneie o QR Code com a câmera do celular e preencha o formulário para participar do sorteio da feira de projetos.</p>
+    <div class="sorteio-qr"><img data-img="qrcode" alt="QR Code do formulário do sorteio"></div>
+    <a class="sorteio-cta" data-sorteio-link href="#" target="_blank" rel="noopener">Abrir formulário</a>
+  </div>
 </div>
 
 <script>
-/* =====================================================================
-   CENTRAL DE ÍCONES E IMAGENS DO REPASSA
-   ---------------------------------------------------------------------
-   Para trocar qualquer ícone do site, basta alterar o CAMINHO abaixo.
-   Não precisa mexer no HTML, no CSS ou no resto do JS.
-
-   Dica: se o arquivo não for encontrado, o ícone aparece como um
-   quadradinho tracejado cinza no lugar, assim você vê onde falta imagem.
-   Formatos aceitos: .png, .svg, .webp, .jpg
-   ===================================================================== */
 
 const ICONS = {
-
-  /* ---------- Marca ---------- */
   'logo':               'assets/logo.png',
-
-  /* ---------- Menu superior ---------- */
-  'busca':              'assets/icons/busca.png',          // lupa (menu + campo de busca)
-  'avisos':             'assets/icons/avisos.png',         // sino
-  'mensagens':          'assets/icons/mensagens.png',      // balão de conversa (menu)
-  'carrinho':           'assets/icons/carrinho.png',       // carrinho
-  'rastreamento':       'assets/icons/rastreamento.png',   // pino de localização
-  'perfil':             'assets/icons/perfil.png',         // pessoa (menu)
-  'sair':               'assets/icons/sair.png',           // porta
-
-  /* ---------- Senha ---------- */
-  'olho':               'assets/icons/olho.png',           // mostrar senha
-  'olho-fechado':       'assets/icons/olho-fechado.png',   // ocultar senha
-
-  /* ---------- Categorias (filtros e itens sem foto) ---------- */
+  'busca':              'assets/icons/busca.png',         
+  'avisos':             'assets/icons/avisos.png',        
+  'mensagens':          'assets/icons/mensagens.png',      
+  'carrinho':           'assets/icons/carrinho.png',       
+  'rastreamento':       'assets/icons/rastreamento.png',  
+  'perfil':             'assets/icons/perfil.png',        
+  'sair':               'assets/icons/sair.png',           
+  'olho':               'assets/icons/olho.png',           
+  'olho-fechado':       'assets/icons/olho-fechado.png',   
   'cat-eletronicos':    'assets/icons/cat-eletronicos.png',
   'cat-acessibilidade': 'assets/icons/cat-acessibilidade.png',
   'cat-saude':          'assets/icons/cat-saude.png',
-
-  /* ---------- Notificações / produto / chat ---------- */
-  'entrega':            'assets/icons/entrega.png',        // caminhão
-  'mensagem':           'assets/icons/mensagem.png',       // balão (avisos, botão Chat, rastreamento)
-  'presente':           'assets/icons/presente.png',       // presente / conta doador
-  'enviar':             'assets/icons/enviar.png',         // botão enviar do chat (use branco)
-  'usuario':            'assets/icons/usuario.png',        // "Doado por"
-  'telefone':           'assets/icons/telefone.png',       // ligar
-
-  /* ---------- Setas ---------- */
-  'voltar':             'assets/icons/voltar.png',         // seta para a esquerda
-  'seta-direita':       'assets/icons/seta-direita.png',   // seta para a direita
-
-  /* ---------- Avaliações e selos ---------- */
+  'entrega':            'assets/icons/entrega.png',       
+  'mensagem':           'assets/icons/mensagem.png',     
+  'presente':           'assets/icons/presente.png',    
+  'enviar':             'assets/icons/enviar.png',         
+  'usuario':            'assets/icons/usuario.png',        
+  'telefone':           'assets/icons/telefone.png',     
+  'voltar':             'assets/icons/voltar.png',        
+  'seta-direita':       'assets/icons/seta-direita.png',  
   'estrela':            'assets/icons/estrela.png',
-  'check':              'assets/icons/check.png',          // verificado / etapa concluída
-  'raio':               'assets/icons/raio.png',           // "responde rápido"
-  'ponto':              'assets/icons/ponto.png',          // etapa atual do rastreamento
-
-  /* ---------- Match Seguro / retirada ---------- */
+  'check':              'assets/icons/check.png',          
+  'raio':               'assets/icons/raio.png',           
+  'ponto':              'assets/icons/ponto.png',          
   'cadeado':            'assets/icons/cadeado.png',
   'chave':              'assets/icons/chave.png',
-  'pessoa':             'assets/icons/pessoa.png',         // marcador no mapa
+  'pessoa':             'assets/icons/pessoa.png',         
   'calendario':         'assets/icons/calendario.png',
-  'sos':                'assets/icons/sos.png',            // botão de emergência
-  'aperto-de-mao':      'assets/icons/aperto-de-mao.png'   // conta donatário
+  'sos':                'assets/icons/sos.png',            
+  'aperto-de-mao':      'assets/icons/aperto-de-mao.png',  
+  'sorteio':            'assets/icons/sorteio.png'       
 };
 
-/* ---------- Fotos dos produtos ---------- */
 const IMAGENS = {
-  'iphone':             'assets/imagem.jpg'
+  'iphone':             'assets/imagem.jpg',
+  'qrcode':             'assets/qrcode.jpeg'             
 };
 
-/* =====================================================================
-   FUNÇÕES AUXILIARES (não precisa editar daqui para baixo)
-   ===================================================================== */
 
-// Gera a tag <img> de um ícone (usada nos templates do JS)
+const SORTEIO = {
+  link: 'https://docs.google.com/forms/d/e/1FAIpQLSdo_XW5x_1W2nbfZpGj1zJfhbIfQdlMxK5N9odFqnP5HXNRew/viewform?usp=publish-editor'   
+};
+
 function ico(nome, classe) {
   const src = ICONS[nome] || '';
   return `<img class="ico ico-${nome}${classe ? ' ' + classe : ''}" data-icon="${nome}" src="${src}" alt="" onerror="this.classList.add('ico-missing')">`;
 }
 
-// Gera N estrelas
+
 function estrelas(n) {
   return ico('estrela').repeat(Math.max(0, Math.round(n)));
 }
 
-// Preenche os <img data-icon="..."> e [data-stars="..."] que estão no HTML
 function aplicarIcones(raiz) {
   raiz = raiz || document;
   raiz.querySelectorAll('img[data-icon]').forEach(img => {
@@ -505,16 +535,30 @@ function aplicarIcones(raiz) {
   raiz.querySelectorAll('[data-stars]').forEach(el => {
     el.innerHTML = estrelas(Number(el.dataset.stars));
   });
+
+
+  raiz.querySelectorAll('img[data-img]').forEach(img => {
+    const box = img.parentElement;
+    const src = IMAGENS[img.dataset.img] || '';
+    img.onload  = () => { img.hidden = false; box.classList.remove('qr-missing'); };
+    img.onerror = () => { img.hidden = true;  box.classList.add('qr-missing'); };
+    if (!src) { img.onerror(); return; }
+    img.src = src;
+  });
+
+  raiz.querySelectorAll('[data-sorteio-link]').forEach(a => {
+    if (SORTEIO.link) { a.href = SORTEIO.link; a.hidden = false; }
+    else { a.hidden = true; }
+  });
 }
 </script>
 
 <script>
-// Base de dados local em memória
+
 const mockDb = {
   usuario: {
     nome: "Usuário Demonstração",
     email: "ingrid.lacerd@gmail.com",
-    tipo: "donatario",
     cpf: "123.456.789-00",
     telefone: "(11) 98765-4321",
     pontuacao: 150
@@ -544,19 +588,6 @@ function togglePw(id, el){
   aplicarIcones(el);
 }
 
-function setRole(role){
-  document.getElementById('rt-doador').classList.toggle('active', role==='doador');
-  document.getElementById('rt-donatario').classList.toggle('active', role==='donatario');
-  document.getElementById('cad-btn').textContent = role==='doador' ? 'Cadastrar como doador' : 'Cadastrar como donatário';
-  mockDb.usuario.tipo = role;
-}
-
-function setCadastroRole(role) {
-  setRole(role);
-  showScreen('screen-cadastro');
-}
-
-// Navegação entre telas SPA
 function showScreen(screenId) {
   document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
   const target = document.getElementById(screenId);
@@ -571,6 +602,7 @@ function showScreen(screenId) {
 
   document.querySelectorAll('.demo-nav button').forEach(b => b.classList.remove('active'));
   if (screenId === 'screen-busca') document.getElementById('btn-nav-busca')?.classList.add('active');
+  if (screenId === 'screen-doar') document.getElementById('btn-nav-doar')?.classList.add('active');
   if (screenId === 'screen-notificacoes') {
     document.getElementById('btn-nav-notif')?.classList.add('active');
     document.getElementById('notif-badge').style.display = 'none';
@@ -590,7 +622,7 @@ function showScreen(screenId) {
   }
 }
 
-// Envio de mensagem no chat
+
 function enviarMensagem(e) {
   e.preventDefault();
   const input = document.getElementById('chat-input-text');
@@ -603,7 +635,6 @@ function enviarMensagem(e) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-// Renderizar busca e filtros
 function handleBusca(e) {
   if (e) e.preventDefault();
   const q = document.getElementById('busca-q').value.toLowerCase().trim();
@@ -640,7 +671,7 @@ function renderCards(list, containerId) {
   `).join('');
 }
 
-// Abrir detalhes do produto
+
 function verProduto(id) {
   itemSelecionado = mockDb.items.find(i => i.id === id) || mockDb.items[0];
   document.getElementById('p-nome').textContent = itemSelecionado.nome;
@@ -659,6 +690,15 @@ function verProduto(id) {
   }
 
   document.getElementById('p-entrega').style.display = itemSelecionado.entrega ? 'inline-block' : 'none';
+
+  
+  const meu = !!itemSelecionado.meu;
+  const d = itemSelecionado.doador;
+  document.getElementById('p-doador-row').innerHTML = meu
+    ? `${ico('usuario')} Doado por você`
+    : `${ico('usuario')} Doado por <a href="#" onclick="abrirDoador('${escapeHtml(d.id)}'); return false;" id="p-doador-link">${escapeHtml(d.nome)} · ${ico('estrela')} ${d.nota} — ver perfil</a>`;
+  document.getElementById('p-acoes').style.display = meu ? 'none' : 'flex';
+  document.getElementById('p-meu-acoes').style.display = meu ? 'block' : 'none';
   
   document.getElementById('p-caracteristicas').innerHTML = itemSelecionado.car.map(c => `<li>${escapeHtml(c)}</li>`).join('');
   document.getElementById('p-especificacoes').innerHTML = itemSelecionado.esp.map(e => `<li>${escapeHtml(e)}</li>`).join('');
@@ -796,15 +836,38 @@ function renderTracking() {
   `;
 }
 
+function iniciais(nome) {
+  const p = String(nome || '').trim().split(/\s+/).filter(Boolean);
+  if (!p.length) return 'U';
+  return (p[0][0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
+}
+
 function renderMeuPerfil() {
   const u = mockDb.usuario;
+  const meus = mockDb.items.filter(i => i.meu);
   const container = document.getElementById('meu-perfil-container');
+
+  const listaMeus = meus.length
+    ? meus.map(it => `
+        <div class="meu-item">
+          <div class="meu-item-thumb">${it.imagem ? `<img src="${it.imagem}" alt="">` : ico(it.icone)}</div>
+          <div class="meu-item-info">
+            <p class="name">${escapeHtml(it.nome)}</p>
+            <p class="meta">${escapeHtml(it.tag)} · ${escapeHtml(it.loc)}</p>
+          </div>
+          <div class="meu-item-acoes">
+            <button class="btn-primary btn-ghost" type="button" onclick="verProduto('${it.id}')">Ver</button>
+            <button class="btn-primary btn-ghost btn-remover" type="button" onclick="removerDoacao('${it.id}')">Remover</button>
+          </div>
+        </div>`).join('')
+    : `<p class="meus-vazio">Você ainda não cadastrou nenhum item para doação.</p>`;
+
   container.innerHTML = `
     <div class="perfil-hero">
-      <div class="perfil-avatar">UD</div>
+      <div class="perfil-avatar">${escapeHtml(iniciais(u.nome))}</div>
       <div class="perfil-hero-info">
         <h2>${escapeHtml(u.nome)}</h2>
-        <p class="since">${u.tipo === 'doador' ? ico('presente') + ' Conta Doador' : ico('aperto-de-mao') + ' Conta Donatário'}</p>
+        <p class="since">Doa e recebe com a mesma conta</p>
         <div class="perfil-badges">
           <span class="perfil-badge">${ico('check')} Email verificado</span>
           <span class="perfil-badge">${ico('estrela')} ${u.pontuacao} pontos de reputação</span>
@@ -818,8 +881,91 @@ function renderMeuPerfil() {
         <div class="perfil-stat-row"><span class="label">Telefone</span><span class="value">${escapeHtml(u.telefone)}</span></div>
         <div class="perfil-stat-row"><span class="label">CPF</span><span class="value">${escapeHtml(u.cpf)}</span></div>
       </div>
+      <div class="perfil-card">
+        <h4>Resumo</h4>
+        <div class="perfil-stat-row"><span class="label">${ico('presente')} Itens que estou doando</span><span class="value">${meus.length}</span></div>
+        <div class="perfil-stat-row"><span class="label">${ico('aperto-de-mao')} Solicitações que fiz</span><span class="value">${mockDb.pedidos.length}</span></div>
+        <button class="btn-primary perfil-cta" type="button" onclick="abrirDoar()">${ico('presente')} Doar um item</button>
+      </div>
+    </div>
+    <div class="perfil-card meus-itens">
+      <h4>Meus itens para doação</h4>
+      ${listaMeus}
     </div>
   `;
+}
+
+// ---------- DOAR ITEM ----------
+const ICONE_POR_CATEGORIA = {
+  'Eletrônicos': 'cat-eletronicos',
+  'Acessibilidade': 'cat-acessibilidade',
+  'Saúde': 'cat-saude'
+};
+let fotoDoacaoURL = '';
+
+function abrirDoar() {
+  const form = document.querySelector('#screen-doar form');
+  form.reset();
+  fotoDoacaoURL = '';
+  const prev = document.getElementById('doar-preview');
+  prev.hidden = true; prev.removeAttribute('src');
+  document.getElementById('doar-upload').classList.remove('has-foto');
+  document.getElementById('doar-upload-txt').textContent = '+ Toque aqui para adicionar uma foto';
+  showScreen('screen-doar');
+  window.scrollTo({ top: 0 });
+}
+
+function previewFotoDoacao(input) {
+  const file = input.files && input.files[0];
+  const prev = document.getElementById('doar-preview');
+  const box = document.getElementById('doar-upload');
+  if (!file) {
+    fotoDoacaoURL = ''; prev.hidden = true; box.classList.remove('has-foto');
+    document.getElementById('doar-upload-txt').textContent = '+ Toque aqui para adicionar uma foto';
+    return;
+  }
+  if (fotoDoacaoURL) URL.revokeObjectURL(fotoDoacaoURL);
+  fotoDoacaoURL = URL.createObjectURL(file);
+  prev.src = fotoDoacaoURL; prev.hidden = false;
+  box.classList.add('has-foto');
+  document.getElementById('doar-upload-txt').textContent = 'Trocar foto';
+}
+
+function handleDoarSubmit(e) {
+  e.preventDefault();
+  const u = mockDb.usuario;
+  const tag = document.getElementById('doar-tag').value;
+  const estado = document.getElementById('doar-estado').value;
+  const desc = document.getElementById('doar-desc').value.trim();
+
+  const novo = {
+    id: 'u' + Date.now(),
+    nome: document.getElementById('doar-nome').value.trim(),
+    tag: tag,
+    loc: document.getElementById('doar-loc').value.trim(),
+    icone: ICONE_POR_CATEGORIA[tag] || 'presente',
+    imagem: fotoDoacaoURL,
+    entrega: document.getElementById('doar-entrega').checked,
+    doador: { id: 'eu', nome: u.nome, nota: 5.0, avatar: iniciais(u.nome)[0] },
+    car: ['Estado de conservação: ' + estado, 'Doação gratuita'],
+    esp: desc.split(/\n+/).map(s => s.trim()).filter(Boolean),
+    meu: true
+  };
+  mockDb.items.unshift(novo);
+  fotoDoacaoURL = '';          // a foto agora pertence ao item
+  handleBusca();
+  alert('Doação publicada! Seu item já aparece na busca para quem precisa.');
+  showScreen('screen-perfil');
+}
+
+function removerDoacao(id) {
+  const it = mockDb.items.find(i => i.id === id && i.meu);
+  if (!it) return;
+  if (!confirm('Remover "' + it.nome + '" das doações?')) return;
+  mockDb.items = mockDb.items.filter(i => i.id !== id);
+  if (it.imagem && it.imagem.startsWith('blob:')) URL.revokeObjectURL(it.imagem);
+  handleBusca();
+  showScreen('screen-perfil');
 }
 
 function handleLogin(e) {
@@ -842,6 +988,51 @@ document.addEventListener('DOMContentLoaded', () => {
   handleBusca();
   showScreen('screen-login');
 });
+
+
+(function () {
+  const nav = document.getElementById('main-nav');
+  const btn = document.getElementById('nav-toggle');
+  if (!nav || !btn) return;
+  const mq = window.matchMedia('(max-width: 1180px)');
+
+  function setOpen(open) {
+    nav.classList.toggle('menu-open', open);
+    document.body.classList.toggle('menu-locked', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    if (open) nav.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+  }
+
+  btn.addEventListener('click', () => setOpen(!nav.classList.contains('menu-open')));
+
+
+  nav.addEventListener('click', (e) => {
+    if (!nav.classList.contains('menu-open')) return;
+    if (e.target === nav || e.target.closest('.nav-links button, .logo-area')) setOpen(false);
+  });
+
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  mq.addEventListener('change', () => setOpen(false));   
+})();
+
+let _focoAntesSorteio = null;
+function abrirSorteio() {
+  const m = document.getElementById('sorteio-modal');
+  _focoAntesSorteio = document.activeElement;
+  m.classList.add('open');
+  document.body.classList.add('menu-locked');
+  m.querySelector('.sorteio-close').focus();
+}
+function fecharSorteio() {
+  const m = document.getElementById('sorteio-modal');
+  if (!m.classList.contains('open')) return;
+  m.classList.remove('open');
+  document.body.classList.remove('menu-locked');
+  if (_focoAntesSorteio) _focoAntesSorteio.focus();
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharSorteio(); });
+window.matchMedia('(max-width: 1180px)').addEventListener('change', fecharSorteio);
 </script>
 
 </body>
