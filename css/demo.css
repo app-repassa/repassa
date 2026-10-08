@@ -24,7 +24,6 @@
   }
   ::selection{background:var(--leaf);color:var(--forest-deep);}
 
-  /* ---------- Nav / page shell (site real, sem abas) ---------- */
   .site-nav{
     background:var(--forest);
     color:#fff;
@@ -96,7 +95,6 @@
   }
   @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
 
-  /* ---------- shared bits ---------- */
   .pill-input{
     width:100%;
     border:1.5px solid var(--line);
@@ -156,7 +154,6 @@
   }
   .btn-ghost:hover{background:var(--leaf-soft);}
 
-  /* ---------- 1. LOGIN ---------- */
   #screen-login{
     display:grid;
     grid-template-columns:1.05fr 1fr;
@@ -260,7 +257,6 @@
   }
   .role-pick button:hover, .role-pick a:hover{background:var(--forest); color:#fff;}
 
-  /* ---------- 2. CADASTRO ---------- */
   #screen-cadastro{padding:36px 42px 42px;}
   .cadastro-head{
     display:flex; align-items:center; justify-content:space-between;
@@ -287,7 +283,6 @@
     text-align:center; font-size:12px; color:var(--ink-soft); margin-top:14px;
   }
 
-  /* ---------- 3. MARKETPLACE / BUSCA ---------- */
   #screen-busca .topbar{
     background:var(--forest);
     color:#fff;
@@ -358,7 +353,7 @@
   }
   .item-info .loc{font-size:11.5px; color:var(--ink-soft); line-height:1.4;}
 
-  /* ---------- PRODUTO (detalhe) ---------- */
+
   #screen-produto .topbar{
     background:var(--forest);
     color:#fff;
@@ -434,7 +429,7 @@
     font-family:'Fredoka', sans-serif; font-size:16px; color:var(--forest-deep); margin:0 0 16px; font-weight:500;
   }
 
-  /* ---------- PERFIL DO DOADOR ---------- */
+
   .perfil-body{
     background:var(--leaf-soft);
     padding:26px 30px 34px;
@@ -512,7 +507,7 @@
     font-family:'Fredoka', sans-serif; font-size:15px; color:var(--ink); margin:0 0 14px; font-weight:500;
   }
 
-  /* ---------- CARRINHO ---------- */
+ 
   #screen-carrinho .topbar{
     background:var(--forest);
     color:#fff;
@@ -566,8 +561,6 @@
   }
   .carrinho-summary .btn-primary{margin-top:18px;}
   .carrinho-note{font-size:11px; color:var(--ink-soft); text-align:center; margin-top:12px; line-height:1.5;}
-
-  /* ---------- RASTREAMENTO ---------- */
   #screen-tracking .topbar{
     background:var(--forest);
     color:#fff;
@@ -671,7 +664,7 @@
     display:flex; align-items:center; gap:8px; margin-top:16px; font-size:11px; color:var(--ink-soft);
   }
 
-  /* ---------- 4. FORMULÁRIO ---------- */
+
   #screen-form{
     background:linear-gradient(160deg, var(--forest) 0%, var(--forest-deep) 100%);
     padding:38px 46px 46px;
@@ -710,7 +703,7 @@
   }
   .form-submit button:hover{background:#D67A3E;}
 
-  /* ---------- opções de múltipla escolha (transporte) ---------- */
+
   .choice-group{display:flex; flex-direction:column; gap:10px; margin-top:8px;}
   .choice-card{
     display:flex; align-items:flex-start; gap:10px;
@@ -726,14 +719,14 @@
   .choice-card.disabled{opacity:.42; cursor:not-allowed;}
   .choice-card.disabled input{cursor:not-allowed;}
 
-  /* ---------- entrega disponível (badge no produto) ---------- */
+
   .entrega-badge{
     display:inline-flex; align-items:center; gap:6px;
     font-size:11.5px; font-weight:600; color:var(--forest-deep);
     background:var(--leaf-soft); padding:5px 12px; border-radius:999px; margin-bottom:12px;
   }
 
-  /* ---------- Match Seguro / agendamento ---------- */
+
   .match-seguro-intro{
     display:flex; gap:12px; align-items:flex-start;
     background:var(--leaf-soft); border:1px solid var(--line);
@@ -755,7 +748,7 @@
   .slot-card .slot-info .data{font-family:'Fredoka', sans-serif; font-weight:600; font-size:14.5px; color:var(--ink);}
   .slot-card .slot-info .horario{font-size:12.5px; color:var(--ink-soft);}
 
-  /* ---------- confirmação por código (lado do doador) ---------- */
+
   .pin-group{display:flex; gap:10px; justify-content:center; margin:20px 0;}
   .pin-group input{
     width:52px; height:60px; text-align:center;
@@ -764,7 +757,7 @@
   }
   .pin-group input:focus{border-color:var(--forest); outline:none; background:#fff;}
 
-  /* ---------- responsive ---------- */
+
   @media (max-width:820px){
     #screen-login{grid-template-columns:1fr;}
     .login-visual{padding:34px 24px;}
@@ -789,7 +782,7 @@
     #screen-cadastro{padding:26px 20px 32px;}
   }
 
-/* Regra estrita de visibilidade das telas */
+
     .view-screen { 
       display: none !important; 
     }
@@ -797,7 +790,7 @@
       display: block !important; 
     }
 
-    /* Barra de Navegação Superior Fixa */
+
     .demo-nav {
       background: #ffffff;
       border-bottom: 1px solid #e2e8f0;
@@ -847,7 +840,7 @@
       color: #2b6cb0;
     }
 
-    /* Badge de Notificação */
+
     .nav-badge {
       background: #e53e3e;
       color: #ffffff;
@@ -858,7 +851,7 @@
       margin-left: 2px;
     }
 
-    /* Navegador / Barra de busca integrada na tela de Busca */
+
     .search-nav-container {
       background: #ffffff;
       border-radius: 12px;
@@ -908,7 +901,7 @@
       border-color: #bee3f8;
     }
 
-    /* ESTILOS DA TELA DE NOTIFICAÇÕES */
+
     .notif-container {
       max-width: 800px;
       margin: 0 auto;
@@ -946,7 +939,6 @@
     .notif-time { font-size: 11px; color: #a0aec0; }
     .notif-desc { font-size: 13px; color: #4a5568; }
 
-    /* ESTILOS DA TELA DE CHAT */
     .chat-layout {
       display: flex;
       height: 520px;
@@ -1072,7 +1064,6 @@
     .chat-input-area .btn-send:hover { background: var(--forest-deep); transform: scale(1.06); }
     .chat-input-area .btn-send svg { width: 22px; height: 22px; fill: currentColor; margin-left: 2px; }
 
-    /* ESTILO DO BOTÃO DE SOS */
     .btn-sos {
       background-color: #e53e3e !important;
       color: #ffffff !important;
@@ -1091,7 +1082,7 @@
       background-color: #c53030 !important;
     }
 
-    /* Estilo para imagem do produto */
+ 
     .produto-photo img {
       width: 100%;
       max-width: 320px;
@@ -1104,9 +1095,7 @@
     }
 
 
-/* =====================================================================
-   ÍCONES · imagens configuradas em js/icons.js
-   ===================================================================== */
+
 .ico{display:inline-block; width:1.15em; height:1.15em; object-fit:contain; vertical-align:-0.2em; flex-shrink:0;}
 .ico-missing{outline:1.5px dashed #a0aec0; outline-offset:-1px; border-radius:4px; background:rgba(160,174,192,.12);}
 
